@@ -9,6 +9,14 @@
     <version>0.1</version>
     <packaging>war</packaging>
 
-    <dependencies></dependencies>
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+            <version>5.0.5.RELEASE</version>
+        </dependency>
+
+    </dependencies>
 
 </project>
