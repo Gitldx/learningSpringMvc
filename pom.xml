@@ -7,6 +7,6 @@
     <groupId>com.f.ldx</groupId>
     <artifactId>ldxF</artifactId>
     <version>0.1</version>
-
+    <packaging>war</packaging>
 
 </project>
