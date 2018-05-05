@@ -13,4 +13,9 @@ public class AccountController {
     public String listAccounts(){
         return "account";
     }
+
+    @RequestMapping("/add")
+    public String add(){
+        return "addAccount";
+    }
 }
