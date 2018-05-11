@@ -5,11 +5,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="<c:url value="/resources/test.css" />" rel="stylesheet" type="text/css">
+<link href="<c:url value="/styles/exclude/test.css" />" rel="stylesheet" type="text/css">
+<link href="<c:url value="/styles/include/test.css" />" rel="stylesheet" type="text/css">
 <title>科目</title>
 </head>
 <body>
-    <div>科目</div>
+    <div class="test2">科目</div>
     <div class="test">科目2</div>
 </body>
 </html>
