@@ -7,6 +7,12 @@
 <title>首页</title>
 </head>
 <body>
+
+    <%--<jsp:forward page="/account" />--%>
+
+    <%
+        response.sendRedirect("/account");
+    %>
     <h1>首页</h1>
     <h2>Hello : ${msg}</h2>
 </body>
