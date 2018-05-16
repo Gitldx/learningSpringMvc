@@ -104,8 +104,8 @@
                 <version>3.2.0</version>
                 <configuration>
                     <warSourceExcludes>
-                        WEB-INF/views/webModule/*,WEB-INF/views/node_modules/*,WEB-INF/views/package.json
-                        ,WEB-INF/views/package-lock.json
+                        WEB-INF/views/web/node_modules/*,WEB-INF/views/web/package.json
+                        ,WEB-INF/views/web/package-lock.json,WEB-INF/views/web/tsconfig.json,WEB-INF/views/web/webpack.config.js
                     </warSourceExcludes>
                 </configuration>
             </plugin>
