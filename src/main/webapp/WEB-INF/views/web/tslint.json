@@ -3,7 +3,9 @@
   "linterOptions": {
     "exclude": [
       "config/**/*.js",
-      "node_modules/**/*.ts"
+      "node_modules/**/*.ts",
+      "service-worker.js",
+      "static/**/*.js"
     ]
   },
   
@@ -29,13 +31,15 @@
         }
         
         
+        
     }
     ,
     "jsRules": {
         "max-line-length": {
             "options": [120]
-        }
-        ,"object-literal-sort-keys": false
+        },
+        "object-literal-sort-keys": false
+        
     }
    
 }
