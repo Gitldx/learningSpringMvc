@@ -31,6 +31,11 @@ export default class App1 extends React.Component<{},{panes:any,activeKey:any}> 
       activeKey: panes[0].key,
       panes,
     };
+
+
+    (window as any).saveAction=this.save;
+    
+
   }
 
   public add=()=> {
@@ -81,7 +86,9 @@ export default class App1 extends React.Component<{},{panes:any,activeKey:any}> 
 
 
 
-
+    private save(){
+      alert("App1 save");
+    }
 
 
 }

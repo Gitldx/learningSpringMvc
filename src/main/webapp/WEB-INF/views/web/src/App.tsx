@@ -98,7 +98,7 @@ import './App.css';
 
 import {Breadcrumb, Icon,Layout,Menu } from 'antd';
 
-import App1 from './App1'
+// import App1 from './App1'
 
 
 
@@ -117,7 +117,7 @@ const SubMenu = Menu.SubMenu;
 
 class App extends React.Component<{},{collapsed:boolean}> {
 
-  private app1:App1;
+  // private app1:App1;
 
   constructor(prop:{}) {
 
@@ -125,10 +125,12 @@ class App extends React.Component<{},{collapsed:boolean}> {
 
     this.state = {
 
-      // collapse: true
-
       collapsed: false
     };
+
+
+    (window as any).saveAction=this.save;
+    
   }
 
   public render() {
@@ -190,7 +192,7 @@ class App extends React.Component<{},{collapsed:boolean}> {
             </Breadcrumb>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
               Bill is a cat.
-              <App1 ref={el=>this.app1 =  el}/>
+              {/* <App1 ref={el=>this.app1 =  el}/> */}
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
@@ -218,11 +220,14 @@ class App extends React.Component<{},{collapsed:boolean}> {
 
   private activate = (param :any )=>{
     // console.log("Tom clicked")
-    this.app1.select();
+    // this.app1.select();
   }
 
   
 
+  private save(){
+    alert("App save");
+  }
 
   
 }

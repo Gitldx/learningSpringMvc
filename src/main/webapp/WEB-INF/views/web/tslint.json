@@ -5,13 +5,14 @@
       "config/**/*.js",
       "node_modules/**/*.ts",
       "service-worker.js",
-      "static/**/*.js"
+      "static/**/*.js",
+      "lib/**/*.js"
     ]
   },
   
   "rules": {
         "max-line-length": {
-            "options": [120]
+            "options": [240]
         },
         "new-parens": true,
         "no-arg": true,
@@ -28,10 +29,10 @@
                 "timeEnd",
                 "trace"
             ]
-        }
-        
-        
-        
+        },
+        "no-reference": false
+        ,"max-classes-per-file":10
+        ,"object-literal-sort-keys":false
     }
     ,
     "jsRules": {
