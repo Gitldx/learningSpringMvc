@@ -54,6 +54,24 @@ http://www.springframework.org/schema/aop/spring-aop.xsd"
     </bean>
 
 
+    <bean id="sqlServerDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.sqlserver.driver}"/>
+        <property name="url" value="${jdbc.sqlserver.url}"/>
+        <property name="username" value="${jdbc.sqlserver.username}"/>
+        <property name="password" value="${jdbc.sqlserver.password}"/>
+    </bean>
+
+
+    <bean id="multipleDataSource" class="com.f.ldx.common.MultipleDataSource">
+        <property name="defaultTargetDataSource" ref="dataSource"/>
+        <property name="targetDataSources">
+            <map>
+                <entry key="mySqlDataSource" value-ref="dataSource"/>
+                <entry key="sqlServerDataSource" value-ref="sqlServerDataSource"/>
+            </map>
+        </property>
+    </bean>
+
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
     </bean>
@@ -94,7 +112,7 @@ http://www.springframework.org/schema/aop/spring-aop.xsd"
 
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="multipleDataSource" />
     </bean>
     <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
         <property name="mapperInterface" value="com.f.ldx.repository.UserMapper" />

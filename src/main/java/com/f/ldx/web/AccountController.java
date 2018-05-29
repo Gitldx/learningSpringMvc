@@ -1,6 +1,7 @@
 package com.f.ldx.web;
 
 
+import com.f.ldx.common.MultipleDataSource;
 import com.f.ldx.domain.User;
 import com.f.ldx.repository.UserDao;
 import com.f.ldx.repository.UserDao_jdbc;
@@ -70,7 +71,9 @@ public class AccountController {
     @ResponseBody
     public User getUser(@RequestParam String userId){
         //return this.userMapper.getUser(userId);
-        return this.userDaoJdbc.getUser(Integer.parseInt(userId));
+        MultipleDataSource.setDataSourceKey("sqlServerDataSource");
+        return this.userMapper.getUser(userId);
+        //return this.userDaoJdbc.getUser(Integer.parseInt(userId));
     }
 
 
