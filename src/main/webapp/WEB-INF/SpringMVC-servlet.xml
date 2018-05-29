@@ -68,9 +68,9 @@ http://www.springframework.org/schema/aop/spring-aop.xsd"
         </property>
     </bean>
 
-    <mvc:resources mapping="/styles/**" location="/WEB-INF/views/content/"
+    <mvc:resources mapping="/styles/**" location="/WEB-INF/views/web/build/"
                    cache-period="31556926"/>
-    <mvc:resources mapping="/js/**" location="/WEB-INF/views/content/"
+    <mvc:resources mapping="/js/**" location="/WEB-INF/views/web/build/"
                    cache-period="31556926"/>
 
     <!--<bean id="emf"-->
