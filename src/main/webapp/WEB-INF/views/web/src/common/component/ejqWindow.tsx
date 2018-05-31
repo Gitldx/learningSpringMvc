@@ -4,9 +4,22 @@ import * as React from "react";
 import { ReactElement } from "react";
 import * as ReactDOM from 'react-dom';
 
+interface Iprops{
+    
+    winOptions :{
+        width:number,
+        height:number,
+        closed : boolean,
+        resizable:boolean,
+        minimizable:boolean,
+        maximizable:boolean,
+        title:string,
+        modal : boolean
+    },
+    saveCallback():void,cancelCallback():void
+}
 
-
-export default class EjqWindow extends React.Component{
+export default class EjqWindow extends React.Component<Iprops>{
 
 private winElm : HTMLElement;
     private submitBtnElm : HTMLElement;
@@ -19,8 +32,8 @@ private winElm : HTMLElement;
                 <div ref={el=>this.contentDiv = el}/>
 
                 <div style={{textAlign:"center",padding:"5px 0"}}>
-                    <a href="javascript:void(0)" ref={el=>this.submitBtnElm=el}  style={{width:"80px"}}>保存</a>
-                    <a href="javascript:void(0)" ref={el=>this.cancelBtnElm=el}  style={{width:"80px"}}>取消</a>
+                    <a href="javascript:void(0)" ref={el=>this.submitBtnElm=el}  style={{width:"80px",marginRight:"5px"}}>保存</a>
+                    <a href="javascript:void(0)" ref={el=>this.cancelBtnElm=el}  style={{width:"80px",marginLeft:"5px"}}>取消</a>
                 </div>
             </div>
         )
@@ -28,16 +41,8 @@ private winElm : HTMLElement;
 
 
     public componentDidMount(){
-        $(this.winElm).window({
-            width:400,
-            height:300,
-            closed : true,
-            resizable:false,
-            minimizable:false,
-            maximizable:false,
-            title:"会计科目",
-            // modal:this.props.isModal ? true : false
-        });
+
+        $(this.winElm).window(this.props.winOptions);
 
         // ReactDOM.render(this.props.children as ReactElement<Element>,this.contentDiv);
     }
@@ -57,14 +62,20 @@ private winElm : HTMLElement;
                 //         return result;
                 //     }
                 // })
+
+                this.props.saveCallback();
             }
         })
 
         $(this.cancelBtnElm).linkbutton({
             onClick:()=>{
-                return;
+                this.props.cancelCallback();
             }
         })
+    }
+
+    public close(){
+        $(this.winElm).window("close");
     }
 
 }

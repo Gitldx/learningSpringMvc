@@ -282,7 +282,7 @@ export default class App extends React.Component<{},IAppStates> {
 
                 <SubMenu key="wl" title={<span><Icon type="swap" /><span>往来</span></span>}>
                     <SubMenu key="receivable" title={<span><Icon type="swap-left" /><span>应收</span></span>}>
-                        <Menu.Item key={Mkn.customInfo}>客户资料</Menu.Item>
+                        <Menu.Item key={Mkn.customerInfo}>客户资料</Menu.Item>
                         <Menu.Item key={Mkn.yszk}>应收账款</Menu.Item>
                     </SubMenu>
                     <SubMenu key="payable" title={<span><Icon type="swap-right" /><span>应付</span></span>}>
