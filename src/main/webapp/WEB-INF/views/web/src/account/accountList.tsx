@@ -12,7 +12,7 @@ import AccountTreegrid from './accountTreegrid'
 
 
 
-
+declare let accList : Array<{accountCode : string,accountName : string,balanceSide : number,accountType : number}>;
 
 declare interface IProps {canEdit:boolean,selectAccountCallback?:()=>number}
 
@@ -54,6 +54,10 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
         this.dataSource.push(a2);
         this.dataSource.push(a3);
         this.dataSource.push(a4)
+
+        this.dataSource = accList.map((item)=>{
+            return new AccountModel(1,item.accountCode,item.accountName,item.accountType,item.balanceSide,true)
+        });
     }
 
     public render(){
@@ -190,7 +194,29 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
 
 
     private saveHandler=()=>{
-        return;
+        const myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+        fetch("/account/add",{
+            method:'POST',
+            headers:myHeaders,
+            body:JSON.stringify({
+                accountCode:'1003',
+                accountName:'xioayuan',
+                accountType : 1,
+                balanceSide : 0,
+                isJournal : 0,
+                level : 1
+              })
+        }).then((response)=>response.json())
+        .then((responseJsonData)=>{
+          alert("请求成功");
+          console.log(responseJsonData);
+        })
+        .catch((error)=>{
+          alert(error);
+        })
+
+        
     }
 
     private cancelHandler=()=>{

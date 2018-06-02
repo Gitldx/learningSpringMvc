@@ -80,7 +80,7 @@ const menues = new Map<string,IMenueItem>([
         ),
         frameKey : "csyeFrame",
         title : "初始余额",
-        url : ""
+        url : "/csye.html"
     }]
 
 ]);

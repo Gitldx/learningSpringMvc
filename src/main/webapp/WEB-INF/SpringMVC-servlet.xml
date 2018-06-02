@@ -8,6 +8,7 @@
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
@@ -19,7 +20,9 @@
 http://www.springframework.org/schema/data/jpa
      http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
 http://www.springframework.org/schema/aop
-http://www.springframework.org/schema/aop/spring-aop.xsd"
+http://www.springframework.org/schema/aop/spring-aop.xsd
+http://mybatis.org/schema/mybatis-spring
+http://mybatis.org/schema/mybatis-spring.xsd"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        >
 
@@ -63,7 +66,8 @@ http://www.springframework.org/schema/aop/spring-aop.xsd"
 
 
     <bean id="multipleDataSource" class="com.f.ldx.common.MultipleDataSource">
-        <property name="defaultTargetDataSource" ref="dataSource"/>
+        <!--<property name="defaultTargetDataSource" ref="dataSource"/>-->
+        <property name="defaultTargetDataSource" ref="sqlServerDataSource"/>
         <property name="targetDataSources">
             <map>
                 <entry key="mySqlDataSource" value-ref="dataSource"/>
@@ -73,7 +77,8 @@ http://www.springframework.org/schema/aop/spring-aop.xsd"
     </bean>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
+        <!--<property name="dataSource" ref="dataSource" />-->
+        <property name="dataSource" ref="multipleDataSource" />
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager" />
@@ -114,9 +119,15 @@ http://www.springframework.org/schema/aop/spring-aop.xsd"
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="multipleDataSource" />
     </bean>
-    <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-        <property name="mapperInterface" value="com.f.ldx.repository.UserMapper" />
-        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
-    </bean>
+
+    <mybatis:scan base-package="com.f.ldx.repository" factory-ref="sqlSessionFactory"/>
+    <!--<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">-->
+        <!--<property name="mapperInterface" value="com.f.ldx.repository.UserMapper" />-->
+        <!--<property name="sqlSessionFactory" ref="sqlSessionFactory" />-->
+    <!--</bean>-->
+    <!--<bean id="kmMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">-->
+        <!--<property name="mapperInterface" value="com.f.ldx.repository.KMMapper" />-->
+        <!--<property name="sqlSessionFactory" ref="sqlSessionFactory" />-->
+    <!--</bean>-->
 
 </beans>
