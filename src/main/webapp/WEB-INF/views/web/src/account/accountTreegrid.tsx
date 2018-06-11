@@ -8,7 +8,7 @@ interface IProps {
     dataSource:AccountModel[],
     accountType : AccountTypeEnum,
     canEdit : boolean,
-    launceEditCallback? : (editAccount : AccountModel) => void
+    dbClickCallback? : (editAccount : AccountModel) => void
 }
 
 export default class AccountTreegrid extends React.Component<IProps>{
@@ -54,7 +54,7 @@ export default class AccountTreegrid extends React.Component<IProps>{
             },
             onLoadSuccess:this.onTreegridLoadSuccess,
             onDblClickRow:(row:AccountModel)=>{
-                if(this.props.canEdit){
+                
 
                     /* this.accountEditWindow.show();
                     const form = <AccountEdit account = {row}/>
@@ -64,9 +64,9 @@ export default class AccountTreegrid extends React.Component<IProps>{
                     // this.setState({currentAccount:row})
                     // this.ejqWindow.show();
 
-                    this.props.launceEditCallback(row);
+                    this.props.dbClickCallback(row);
                     
-                }
+
                 
             }
         });

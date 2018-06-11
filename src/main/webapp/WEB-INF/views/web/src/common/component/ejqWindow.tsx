@@ -16,7 +16,9 @@ interface Iprops{
         title:string,
         modal : boolean
     },
-    saveCallback():void,cancelCallback():void
+    showBtn : boolean,
+    saveCallback?():void,cancelCallback?():void
+    
 }
 
 export default class EjqWindow extends React.Component<Iprops>{
@@ -30,11 +32,15 @@ private winElm : HTMLElement;
         return (
             <div ref={el => this.winElm = el}>
                 <div ref={el=>this.contentDiv = el}/>
-
-                <div style={{textAlign:"center",padding:"5px 0"}}>
-                    <a href="javascript:void(0)" ref={el=>this.submitBtnElm=el}  style={{width:"80px",marginRight:"5px"}}>保存</a>
-                    <a href="javascript:void(0)" ref={el=>this.cancelBtnElm=el}  style={{width:"80px",marginLeft:"5px"}}>取消</a>
-                </div>
+                {
+                    this.props.showBtn ? 
+                        <div style={{textAlign:"center",padding:"5px 0"}}>
+                        <a href="javascript:void(0)" ref={el=>this.submitBtnElm=el}  style={{width:"80px",marginRight:"5px"}}>保存</a>
+                        <a href="javascript:void(0)" ref={el=>this.cancelBtnElm=el}  style={{width:"80px",marginLeft:"5px"}}>取消</a>
+                        </div>
+                    : null
+                }
+                
             </div>
         )
     }
@@ -54,24 +60,27 @@ private winElm : HTMLElement;
 
         ReactDOM.render(this.props.children as ReactElement<Element>,this.contentDiv);
         
-        $(this.submitBtnElm).linkbutton({
-            onClick:()=>{
-                // $(this.accFormElm).form('submit',{
-                //     onSubmit:()=>{
-                //         const result = $(this.accFormElm).form('enableValidation').form('validate');
-                //         return result;
-                //     }
-                // })
+        if(this.props.showBtn){
+            $(this.submitBtnElm).linkbutton({
+                onClick:()=>{
+                    // $(this.accFormElm).form('submit',{
+                    //     onSubmit:()=>{
+                    //         const result = $(this.accFormElm).form('enableValidation').form('validate');
+                    //         return result;
+                    //     }
+                    // })
+    
+                    this.props.saveCallback();
+                }
+            })
+    
+            $(this.cancelBtnElm).linkbutton({
+                onClick:()=>{
+                    this.props.cancelCallback();
+                }
+            })
+        }
 
-                this.props.saveCallback();
-            }
-        })
-
-        $(this.cancelBtnElm).linkbutton({
-            onClick:()=>{
-                this.props.cancelCallback();
-            }
-        })
     }
 
     public close(){

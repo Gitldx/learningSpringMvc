@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { Radio } from 'antd';
 
-import {AccountModel,BalanceSideEnum} from "./AccountModel"
+import {AccountModel, AccountTypeEnum,BalanceSideEnum} from "./AccountModel"
 
 const RadioGroup = Radio.Group;
 
@@ -17,6 +17,8 @@ export default class AccountEdit3 extends React.Component<{account : AccountMode
         private accTypeElm : HTMLElement;
         
         private accFormElm : HTMLElement;
+
+        private model : AccountModel;
     
         private accountTypes : Array<{value:number,displayName:string}> = [
             {value:1,displayName:"资产"},
@@ -29,7 +31,8 @@ export default class AccountEdit3 extends React.Component<{account : AccountMode
         
         constructor(props : {account : AccountModel}){
             super(props);
-            this.state = {balanceSideValue : this.props.account.BalanceSide};
+            this.model = this.props.account || new AccountModel(0,"","",AccountTypeEnum.Asset,BalanceSideEnum.Debit,false);
+            this.state = {balanceSideValue : this.model.BalanceSide};
         }
             
         public render(){
@@ -82,8 +85,8 @@ export default class AccountEdit3 extends React.Component<{account : AccountMode
     
 
 
-            if(this.props.account){
-                const acc = this.props.account;
+            if(this.model){
+                const acc = this.model;
                 $(this.accCodeElm).textbox("initValue",acc.AccountCode);
                 $(this.accNameElm).textbox("initValue",acc.AccountName);
                 $(this.accTypeElm).combobox("setValue",acc.AccountType);

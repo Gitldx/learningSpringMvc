@@ -12,9 +12,9 @@ import AccountTreegrid from './accountTreegrid'
 
 
 
-declare let accList : Array<{accountCode : string,accountName : string,balanceSide : number,accountType : number}>;
+// declare let accList : Array<{accountCode : string,accountName : string,balanceSide : number,accountType : number}>;
 
-declare interface IProps {canEdit:boolean,selectAccountCallback?:()=>number}
+declare interface IProps {canEdit:boolean,dbClickAccountCallback?:(acc:AccountModel)=>void}
 
 export class AccountList extends React.Component<IProps,{currentAccount : AccountModel}>{
 
@@ -53,11 +53,15 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
         this.dataSource.push(a1);
         this.dataSource.push(a2);
         this.dataSource.push(a3);
-        this.dataSource.push(a4)
+        this.dataSource.push(a4);
 
-        this.dataSource = accList.map((item)=>{
-            return new AccountModel(1,item.accountCode,item.accountName,item.accountType,item.balanceSide,true)
-        });
+        // this.dataSource = accList.map((item)=>{
+        //     return new AccountModel(1,item.accountCode,item.accountName,item.accountType,item.balanceSide,true)
+        // });
+        if(this.props.canEdit){
+            (window as any).addAction = this.add;
+        }
+        
     }
 
     public render(){
@@ -78,12 +82,12 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
                     <div title="资产" style={{padding:"20px",width:"100%"}}>
                         {/* <table id="tAsset"  style={{width:"100%",height:"auto"}}/> */}
                         <AccountTreegrid ref={el=>this.assetTreegrid = el} {...{accountType : AccountTypeEnum.Asset,dataSource:this.dataSource,canEdit:this.props.canEdit}}
-                         launceEditCallback={this.edit}/>
+                         dbClickCallback={this.dbClickHandler}/>
                     </div>
                     <div title="负债" style={{overflow:"auto",padding:"20px"}}>
                         {/* <table id="tLiability"  style={{width:"100%",height:"auto"}}/> */}
                         <AccountTreegrid ref={el=>this.liabilityTreegrid = el} {...{accountType : AccountTypeEnum.Liabilities,dataSource:this.dataSource,canEdit:this.props.canEdit}}
-                         launceEditCallback={this.edit}/>
+                         dbClickCallback={this.dbClickHandler}/>
                     </div>
                     <div title="权益" >
                         tab3
@@ -99,7 +103,7 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
                 {/* <Window ref={el =>this.accountEditWindow=el} content={this.state.editingAccount}/> */}
 
 
-                <EjqWindow ref={el =>this.ejqWindow=el} saveCallback={this.saveHandler} cancelCallback={this.cancelHandler} winOptions = {winOptions}>
+                <EjqWindow ref={el =>this.ejqWindow=el} showBtn={true} saveCallback={this.saveHandler} cancelCallback={this.cancelHandler} winOptions = {winOptions}>
                     <AccountEdit3  account={this.state.currentAccount}/>
                 </EjqWindow>
             </div>
@@ -187,8 +191,20 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
     //     $(this).treegrid('collapseAll');
     // }
 
-    private edit = (acc : AccountModel)=>{
-        this.setState({currentAccount:acc});
+    private dbClickHandler = (acc : AccountModel)=>{
+        
+        if(this.props.canEdit){
+            this.setState({currentAccount:acc});
+            this.ejqWindow.show();
+        }
+        else{
+            this.props.dbClickAccountCallback(acc);
+        }
+        
+    }
+
+    private add = ()=>{
+        this.setState({currentAccount:new AccountModel(null,null,null,null,null,null)});
         this.ejqWindow.show();
     }
 

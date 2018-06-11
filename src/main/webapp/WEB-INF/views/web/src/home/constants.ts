@@ -81,6 +81,19 @@ const menues = new Map<string,IMenueItem>([
         frameKey : "csyeFrame",
         title : "初始余额",
         url : "/csye.html"
+    }],
+
+
+    [MenuKeyName.dopz,{
+        btnsStatus : new BtnsStatus(
+            {Visible:false},
+            {Visible:true},
+            {Visible:true},
+            {Visible:true},
+        ),
+        frameKey : "dopzFrame",
+        title : "制凭证",
+        url : "/pz.html"
     }]
 
 ]);

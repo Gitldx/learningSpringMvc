@@ -3,6 +3,7 @@ interface JQuery {
     datagrid(method:string,param:{}):any;
     combogrid(str:string):any;
     combogrid(obj:{}):any;
+    combogrid(method:string,param:{}):any;
     window(obj:{}):any;
     numberspinner(obj:{}):any;
     numberspinner(method:string,param:{}):any;
@@ -15,6 +16,7 @@ interface JQuery {
     treegrid(obj:{}):any;
     tabs(obj?:{}):any;
     tabs(method:string,param:{}):any;
+    textbox(obj:{}):any;
     textbox(method:string,param:{}):any;
     switchbutton(obj:{}):any;
     switchbutton(method:string,param:{}):any;

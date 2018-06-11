@@ -1,0 +1,109 @@
+div.amountSpan,
+div.amountCol {
+  background-image: url("/lib/static/amountSeprator2.png");
+}
+div.amountCol {
+  height: 39px;
+  align-items: center;
+  display: flex;
+  margin-right: -4px;
+}
+div.amountCol > div {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: 0px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+div.amountCol > div > span {
+  display: inline-block;
+  width: 10.9px;
+  font-size: 14px;
+  text-align: center;
+  /* border-top: 1px solid lightgray */
+}
+.amountSpan > span {
+  display: inline-block;
+  width: 10.9px;
+  text-align: center;
+  /* border-top: 1px solid lightgray */
+}
+div.panel.datagrid.panel-htop tr.datagrid-row > td[field=Summary] > div {
+  height: 39px;
+  /* word-break: break-all;
+    white-space:normal; */
+}
+div.panel.datagrid.panel-htop tr.datagrid-row > td[field=Summary] > div > pre {
+  height: 39px;
+  white-space: pre-wrap;
+  /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;
+  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;
+  /* Opera 4-6 */
+  white-space: -o-pre-wrap;
+  /* Opera 7 */
+  word-wrap: break-word;
+  /* Internet Explorer 5.5+ */
+  overflow: hidden;
+}
+div.panel.datagrid.panel-htop tr.datagrid-row > td[field=Account] > div {
+  height: 39px;
+  word-break: break-all;
+  white-space: normal;
+}
+div.panel.datagrid.panel-htop tr.datagrid-row > td[field*=Amount] > div {
+  height: 39px;
+}
+div.datagrid-footer td[field=Summary] > div {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  line-height: 39px;
+}
+div#voucherToolBar div.VoucherTitle {
+  text-align: center;
+  margin-bottom: 5px;
+}
+div#voucherToolBar div.VoucherTitle span.label {
+  margin: 0 5px;
+  line-height: 20px;
+}
+div#voucherToolBar div.left {
+  float: left;
+}
+div#voucherToolBar div.right {
+  float: right;
+}
+span#voucherBrand {
+  font: bold 2em "宋体", Arial, Times;
+}
+div.accountText {
+  /* display: inline-block; */
+  width: 240px;
+  height: 39px;
+  word-break: break-all;
+  white-space: normal;
+  align-items: center;
+  display: flex;
+  /* border: 1px solid lightgray; */
+}
+div.accountPopupBtn {
+  display: none;
+  margin-left: auto;
+  margin-right: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  /* width: 30px;
+    height: 60px; */
+  text-align: center;
+}
+div.accountPopupBtn a:visited,
+div.accountPopupBtn a:link,
+div.accountPopupBtn a:hover {
+  color: green;
+}
+#vwin input,
+#vwin textarea {
+  color: black;
+}

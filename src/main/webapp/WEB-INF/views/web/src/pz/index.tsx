@@ -2,14 +2,15 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import {AccountList} from './accountList';
+import List from './list'
 
+// import './finance.less'
 
 
 ReactDOM.render(
-    <AccountList canEdit={true}/>,
+    <List />,
     document.getElementById('root') as HTMLElement
-  );
+);
 
 
 
