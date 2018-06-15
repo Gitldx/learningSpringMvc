@@ -8,6 +8,11 @@ import {AccountModel, AccountTypeEnum,BalanceSideEnum} from "./AccountModel"
 
 const RadioGroup = Radio.Group;
 
+
+
+
+
+
 export default class AccountEdit3 extends React.Component<{account : AccountModel},{balanceSideValue:BalanceSideEnum}>{
     
     public model : AccountModel;
@@ -95,7 +100,8 @@ export default class AccountEdit3 extends React.Component<{account : AccountMode
         $(this.accCodeElm).textbox({
             onChange:(newValue,oldValue)=>{
                 this.model.AccountCode = newValue;
-            }
+            },
+            validType : "accountCode"
         })
 
         $(this.accNameElm).textbox({

@@ -14,7 +14,7 @@ import AccountTreegrid from './accountTreegrid'
 
 
 
-// declare let accList : Array<{accountCode : string,accountName : string,balanceSide : number,accountType : number}>;
+declare let accList : IAccDataJson[];
 
 declare interface IProps {canEdit:boolean,dbClickAccountCallback?:(acc:AccountModel)=>void}
 
@@ -153,7 +153,10 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
 
 
         
-
+        setTimeout(() => {
+            // console.log($("#menuSider").width());
+            $("#tbs").tabs("resize");
+        }, 300);
 
         
         
@@ -201,6 +204,33 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
         // })
 
         this.setAccDatasource();
+
+        
+        $.extend(($.fn as any).validatebox.defaults.rules, {
+            accountCode: {
+                validator :(value, param)=> {
+                // const error=false;;
+                if(value.length>3){
+                        // 4-25验证
+                        ($.fn as any).validatebox.defaults.rules.accountCode.message ="科目长度不合法";
+                    return false;
+                }
+                // const exist=$.ajax({
+                //         url:"${basePath}pkg/nameExist",
+                //         data:{name:value},
+                //         async:false
+                //     }).responseText;
+                // if(exist==="false"){
+                //     ($.fn as any).validatebox.defaults.rules.name.message ="此积分方案已存在！";
+                //     return false;
+                // }
+                    return true;
+                },
+                message: ''
+            }
+        })
+
+
     }
 
     private setAccDatasource(){
@@ -208,52 +238,38 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
         const StopWatch = require('stopwatch-js')
         const w = new StopWatch();
 
+
+
         w.start();
+        const levels = [this.bookInfo.lv1,this.bookInfo.lv2,this.bookInfo.lv3,this.bookInfo.lv4,this.bookInfo.lv5,this.bookInfo.lv6];
+        
+        const data = accList;
 
-        $.ajax({ 
-            type : "get", 
-            url : "/account/list", 
-            async : false, 
-            success : (data : IAccDataJson[])=>{ 
+        data.forEach((item,index)=>{
+            item.balanceSide = item.balanceSide ? BalanceSideEnum.Credit : BalanceSideEnum.Debit;
+        })
+        const temp = data.sort((a,b)=> a.accountCode < b.accountCode ? -1 : 1);
+        const temp2 = temp.map((item,index)=> new AccountModel(item.id,item.accountCode,item.accountName,item.accountType,item.balanceSide,item.journal,item.level));
+
+
+        temp2.forEach((item,index)=>{
+            const upperLength = levels.slice(0,item.Level).reduce((a,b)=>a + b,0)  - levels[item.Level];
+
+            const upperCode = item.AccountCode.substr(0,upperLength);
+           
+            const found = temp2.find((acc,dataIndex)=>{
+                return acc.AccountCode === upperCode;
+            })
+            if(found){
                 
-                w.stop();
-                console.log(`1:${w.duration()}`)
-
-
-                w.start();
-                const levels = [this.bookInfo.lv1,this.bookInfo.lv2,this.bookInfo.lv3,this.bookInfo.lv4,this.bookInfo.lv5,this.bookInfo.lv6];
-                
-                data.forEach((item,index)=>{
-                    item.balanceSide = item.balanceSide ? BalanceSideEnum.Credit : BalanceSideEnum.Debit;
-                })
-                const temp = data.sort((a,b)=> a.accountCode < b.accountCode ? -1 : 1);
-                const temp2 = temp.map((item,index)=> new AccountModel(item.id,item.accountCode,item.accountName,item.accountType,item.balanceSide,item.journal,item.level));
-
-
-                temp2.forEach((item,index)=>{
-                    const upperLength = levels.slice(0,item.Level).reduce((a,b)=>a + b,0)  - levels[item.Level];
-
-                    const upperCode = item.AccountCode.substr(0,upperLength);
-                   
-                    const found = temp2.find((acc,dataIndex)=>{
-                        return acc.AccountCode === upperCode;
-                    })
-                    if(found){
-                        
-                        found.children.push(item);
-                    }
-                })
-
-                this.dataSource = temp2.filter((item,index)=>item.Level ===1);
-
-                w.stop();
-                console.log(`2:${w.duration()}`)
-                // console.log("dataSource:" + JSON.stringify(this.dataSource))
-            },
-            error :(err)=>{
-                alert(err);
+                found.children.push(item);
             }
-        }); 
+        })
+
+        this.dataSource = temp2.filter((item,index)=>item.Level ===1);
+
+        w.stop();
+        console.log(`watch:${w.duration()}`)
     }
 
     private getLevelOfCode(code : string) : number{
