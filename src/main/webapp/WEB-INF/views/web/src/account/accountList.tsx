@@ -36,6 +36,7 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
     private pl : AccountTreegrid;
     private editWindow : AccountEdit3;
     private bookInfo : {lv1:number,lv2:number,lv3:number,lv4:number,lv5:number,lv6:number}
+    private tabs : HTMLElement;
 
     constructor(props:IProps){
 
@@ -94,7 +95,7 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
         return (
             <div>
                 {/* <a id="addAccBtn" style={{margin:"5px 0",display:this.props.canEdit ? "inherit":"none",width:"100px"}} className='c4' href='javascript:void(0)' onClick={this.showEdit.bind(this)}>新增</a> */}
-                <div id="tbs" style={{width:"100%",height:"auto"}}>
+                <div ref={el => this.tabs = el} style={{width:"100%",height:"auto"}}>
                     <div title="资产" style={{padding:"20px",width:"100%"}}>
                         {/* <table id="tAsset"  style={{width:"100%",height:"auto"}}/> */}
                         <AccountTreegrid ref={el=>this.assetTreegrid = el} {...{accountType : AccountTypeEnum.Asset,dataSource:this.dataSource,canEdit:this.props.canEdit}}
@@ -135,7 +136,7 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
     public componentDidMount(){
 
         
-        $("#tbs").tabs({
+        $(this.tabs).tabs({
             plain : true,
             onSelect:(title:string,index:number)=>{
                 // switch(index){
@@ -155,7 +156,7 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
         
         setTimeout(() => {
             // console.log($("#menuSider").width());
-            $("#tbs").tabs("resize");
+            $(this.tabs).tabs("resize");
         }, 300);
 
         
@@ -417,12 +418,24 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
     private saveHandler=()=>{
 
         const m = this.editWindow.model;
+        m.Id = 807;
+
+        switch(m.AccountType){
+            case AccountTypeEnum.Asset :
+                $(this.tabs).tabs("select",0);
+                $(this.assetTreegrid.getTreegirdElm()).treegrid("insert",{
+                    before: 515,
+                    data: m
+                })
+            break;
+        }
 
         if(!this.getLevelOfCode(m.AccountCode)){
             this.ejqAlert.show("科目长度不合法！");
             return;
         }
 
+        /* 
         const myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/json');
         fetch("/account/add",{
@@ -443,7 +456,7 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
         })
         .catch((error)=>{
           alert(error);
-        })
+        }) */
 
         
     }

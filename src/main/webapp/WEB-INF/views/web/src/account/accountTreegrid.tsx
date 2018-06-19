@@ -39,6 +39,12 @@ export default class AccountTreegrid extends React.Component<IProps>{
         console.log(`3:${w.duration()}`)
     }
 
+    
+
+    public getTreegirdElm() : HTMLElement{
+        return this.treegridElm;
+    }
+
     private initAccTreegrid(){
 
         $(this.treegridElm).treegrid({
