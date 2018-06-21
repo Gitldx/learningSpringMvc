@@ -30,14 +30,14 @@ export default class List extends React.Component{
         this.vw.closeWindow();
         setTimeout(() => {
             this.vw.showWindow();
-        }, 200);
+        }, 100);
     }
 
     private test=()=>{
         this.vw.closeWindow();
         setTimeout(() => {
             this.vw.showWindow();
-        }, 200);
+        }, 100);
     }
 
     private setEuiControl(){
@@ -79,5 +79,13 @@ export default class List extends React.Component{
                 }
             }
         });
+
+
+        // ($.fn.datebox as any).defaults.formatter = (date)=>{
+        //     const y = date.getFullYear();
+        //     const m = date.getMonth()+1;
+        //     const d = date.getDate();
+        //     return y +'/'+ m +'/'+ d;
+        // }
     }
 }

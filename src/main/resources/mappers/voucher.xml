@@ -1,0 +1,38 @@
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.f.ldx.domain">
+    <resultMap type="com.f.ldx.domain.Voucher" id="voucher">
+        <id column="id" property="id"/>
+        <result column="bookId" property="bookId"/>
+        <result column="year" property="year"/>
+        <result column="period" property="period"/>
+        <result column="voucherDate" property="voucherDate"/>
+        <result column="voucherType" property="voucherType"/>
+        <result column="voucherNum" property="voucherNum"/>
+        <result column="sourceDocs" property="sourceDocs"/>
+        <result column="auditMan" property="auditMan"/>
+        <result column="docMan" property="docMan"/>
+        <result column="modifyMan" property="modifyMan"/>
+    </resultMap>
+
+    <select id="getVoucher" parameterType="int" resultMap="voucher">
+        select * from Voucher where id = #{id}
+    </select>
+
+    <insert id="insertVoucher" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into Voucher (BookId,[Year],Period,VoucherDate,VoucherTypeId,VoucherNum,SourceDocs,AuditMan,AuditDate,LastModificationTime,
+        LastModifierUserId,CreationTime,CreatorUserId)
+        values (#{bookId},#{year},#{period},#{voucherDate},#{voucherType},#{voucherNum},#{sourceDocs},#{auditMan},null,null
+        ,#{modifyMan},GETDATE(),#{docMan})
+    </insert>
+
+    <insert id="insertEntries" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into VoucherEntries(VoucherId ,AccountId ,Summary ,Amount ,BalanceSide ,RowNum)VALUES
+        <foreach item="item" collection="list" separator=",">
+            (#{item.voucherId}, #{item.accountId}, #{item.summary}, #{item.amount},#{item.balanceSide},#{item.rowNum})
+        </foreach>
+    </insert>
+
+</mapper>

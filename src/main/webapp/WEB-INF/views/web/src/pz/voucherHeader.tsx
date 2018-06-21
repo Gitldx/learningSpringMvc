@@ -3,8 +3,10 @@
 import * as React from "react";
 import Pzgird from "./pzgrid"
 
+import VoucherModel from './VoucherModel'
 
-interface IProps{VoucherYear : number;VoucherPeriod:number,VoucherDate:string,VoucherTypeId:number};
+
+interface IProps{Vouhcer : VoucherModel};
 // interface IStates{
 // }
 
@@ -116,12 +118,14 @@ export class VoucherHeader extends React.Component<IProps,{}>{
         //         this.voucherDg.AppendVoucherEntry()
         //     }
         // });
-
+        
+        
 
         $(this.saveBtnElm).linkbutton({
             onClick : ()=>{
-                console.log("saveBtnElm click");
-                
+                // console.log("saveBtnElm click");
+                // console.log(this.voucherDg.Entries.rows.filter((item)=>item.Account))
+                this.saveHandler();
             }
         });
 
@@ -154,9 +158,30 @@ export class VoucherHeader extends React.Component<IProps,{}>{
             }
         });
         $(this.dateInputElm).datebox({
-            onChange:(newValue:number,oldValue:number)=>{
+            onChange:(newValue:string,oldValue:string)=>{
                 console.log(newValue);
-                
+                const split = newValue.split('/')
+                this.props.Vouhcer.VoucherDate.setFullYear(Number(split[0]),Number(split[1]) -1,Number(split[2]));
+
+                console.log(this.props.Vouhcer.VoucherDate.toISOString());
+            },
+            formatter:(date)=>{
+                const y = date.getFullYear();
+                const m = date.getMonth()+1;
+                const d = date.getDate();
+                return y+'/'+(m<10?('0'+m):m)+'/'+(d<10?('0'+d):d);
+            },
+            parser:(s)=>{
+                if (!s) {return new Date()};
+                const ss = (s.split('/'));
+                const y = parseInt(ss[0],10);
+                const m = parseInt(ss[1],10);
+                const d = parseInt(ss[2],10);
+                if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+                    return new Date(y,m-1,d);
+                } else {
+                    return new Date();
+                }
             }
         });
 
@@ -186,10 +211,10 @@ export class VoucherHeader extends React.Component<IProps,{}>{
     
     public InitValue(){
         if(!this.hasLoaded){
-            $(this.yearInputElm).numberspinner("setValue",this.props.VoucherYear);
-            $(this.periodInputElm).numberspinner("setValue",this.props.VoucherPeriod);
-            $(this.dateInputElm).datebox("setValue",this.props.VoucherDate);
-            $(this.voucherTypeInputElm).combobox("setValue",this.props.VoucherTypeId)
+            $(this.yearInputElm).numberspinner("setValue",this.props.Vouhcer.Year);
+            $(this.periodInputElm).numberspinner("setValue",this.props.Vouhcer.Period);
+            $(this.dateInputElm).datebox("setValue",this.props.Vouhcer.VoucherDate.toISOString());
+            $(this.voucherTypeInputElm).combobox("setValue",this.props.Vouhcer.VoucherType)
             this.hasLoaded = true;
         }
         
@@ -204,4 +229,43 @@ export class VoucherHeader extends React.Component<IProps,{}>{
     //     console.log(event);
     //     this.setState({VoucherYear:event.target.value});
     // }
+
+    private saveHandler(){
+        const v = this.props.Vouhcer;
+        const myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+        fetch("/pz/add",{
+            method:'POST',
+            headers:myHeaders,
+            body:JSON.stringify({
+                voucher:{
+                    year:v.Year,
+                    period:v.Period,
+                    voucherDate : v.VoucherDate,
+                    voucherType : v.VoucherType,
+                    voucherNum : v.VoucherNum
+                },
+                entries:this.voucherDg.Entries.rows.map((value,rowIndex)=>(
+                    {
+                        id:value.EntryId,
+                        voucherId : 0,
+                        accountId : value.Account,
+                        summary : value.Summary,
+                        amount : !value.DebitAmount ? value.CreditAmount : value.DebitAmount,
+                        balanceSide : !value.DebitAmount ? true : false,
+                        rowNum : rowIndex
+                    }
+                ))
+                
+              })
+
+        }).then((response)=>response.json())
+        .then((responseJsonData)=>{
+          alert("请求成功");
+          
+        })
+        .catch((error)=>{
+          alert(error);
+        })
+    }
 }

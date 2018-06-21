@@ -3,11 +3,12 @@ import * as React from "react";
 
 import Pzgrid from "./pzgrid"
 import{VoucherHeader} from "./voucherHeader"
+import VoucherModel from './VoucherModel'
 
 
 declare let window:any;
 
-export interface IState{showdg:boolean}
+export interface IState{showdg:boolean,voucher:VoucherModel}
 
 export class VoucherWindow extends React.Component<{},IState>{
 
@@ -18,14 +19,19 @@ export class VoucherWindow extends React.Component<{},IState>{
 
     constructor(props:{}){
         super(props);
-        this.state = {showdg:false};
+
+        const vdate = new Date();
+        
+        vdate.setFullYear(2018,5,18);
+        this.state = {showdg:false,
+            voucher : new VoucherModel(undefined,2,2018,6,vdate,2,33,2,100,100,100)
+        };
     }
 
     public render(){
         const dg = this.state.showdg === true ? 
             <div style={{textAlign:"center"}}> 
-                <VoucherHeader VoucherYear={2018} VoucherPeriod={12} VoucherDate={"2018-10-28"}
-                VoucherTypeId = {2} ref={el=>this.voucherHeader = el}/> 
+                <VoucherHeader Vouhcer = {this.state.voucher} ref={el=>this.voucherHeader = el}/> 
                 <Pzgrid ref={el => this.pzDatagrid = el}/>
             </div> 
             : "";

@@ -9,7 +9,7 @@ export default class VoucherEntryModel{
         public Summary:string,
         public Account:number,
         private debitAmount : number,
-        public creditAmount : number,
+        private creditAmount : number,
         public IsDetailAccount : boolean,
         public IsFooter? : boolean,
         

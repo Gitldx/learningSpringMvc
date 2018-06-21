@@ -14,6 +14,7 @@ interface JQuery {
     linkbutton(obj:{}):any;
     linkbutton(method:string,param:{}):any;
     treegrid(obj:{}):any;
+    treegrid(method:string,param:{}):any;
     tabs(obj?:{}):any;
     tabs(method:string,param:{}):any;
     textbox(obj:{}):any;

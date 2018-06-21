@@ -14,6 +14,11 @@ import {AccountModel} from "../account/AccountModel"
 import {stripNumber} from '../common/util/numberHelper'
 
 
+declare let accList : IAccDataJson[];
+
+declare interface IAccDataJson {accountCode:string,accountName:string,accountType:number,balanceSide:number
+    ,bookId:number,isDetailedAccount:boolean,isforbidden:boolean,fullName:
+    string,id:number,isJournal:boolean,level:number}
 
 
 declare let window:any;
@@ -98,7 +103,14 @@ export default class Pzgrid extends React.Component<{},{}>{
     private sumaryColumnProperty = { 
         field: 'Summary', title: 'XX',halign : "center", width: 170,fixed:true,resizable:false, editor: { type: 'textarea',options:{multiline:true,height:this.cellHeight} },
             formatter(value:string,rowData:VoucherEntryModel,rowIndex:number){
-                return `<pre>${value}</pre>`;
+                if(rowData.IsFooter){
+                    return value;
+                }
+                else
+                {
+                    return `<pre>${value}</pre>`;
+                }
+                
             }
     }
 
@@ -113,7 +125,9 @@ export default class Pzgrid extends React.Component<{},{}>{
             textField: 'AccountCode',
             method: 'get',
             // url: 'Datagrid_data1',
-            data: this.accountsDataSource,
+            data: accList.map((item)=>(
+                {AccountId : item.id,AccountCode : item.accountCode,AccountName : item.accountName,IsDetail: item.isDetailedAccount}
+            )).sort((a,b)=> a.AccountCode < b.AccountCode ? -1 : 1),
             required: false,
             selectOnNavigation: false,
             panelWidth: 300,
@@ -222,6 +236,12 @@ export default class Pzgrid extends React.Component<{},{}>{
     constructor(prop:{}){
         super(prop);
         this.state = {};
+
+        this.accountsDataSource = accList.map((item)=>(
+            {AccountId : item.id,AccountCode : item.accountCode,AccountName : item.accountName,IsDetail: item.isDetailedAccount}
+        )).sort((a,b)=> a.AccountCode < b.AccountCode ? -1 : 1)
+
+        
     }
 
     public render(){
@@ -240,8 +260,8 @@ export default class Pzgrid extends React.Component<{},{}>{
 
         const accListWinOptions = {
             title:"科目",
-            width: 500,
-            height: 400,
+            width: 600,
+            height: 500,
             closed: true,
             resizable:false,
             minimizable:false,
@@ -462,7 +482,7 @@ export default class Pzgrid extends React.Component<{},{}>{
         $(this.tableElm).datagrid("editCell",{index,field});
         const elm = $(this.tableElm).datagrid("getEditor",{index,field});
         
-        $(elm.target).focus().combogrid("setValue",103);
+        $(elm.target).focus().combogrid("setValue",acc.Id);
         const item = $(this.tableElm).datagrid("getRows")[index] as VoucherEntryModel;
         item.AccountCode = acc.AccountCode;
         item.AccountName = acc.AccountName;
@@ -590,4 +610,9 @@ export default class Pzgrid extends React.Component<{},{}>{
     // private strip(num:number, precision:number = 12) {
     //     return +parseFloat(Number(num).toPrecision(precision));
     // }
+
+
+    get Entries(){
+        return this.dataSource;
+    }
 }

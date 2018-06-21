@@ -52,7 +52,7 @@ export default class App extends React.Component<{},IAppStates> {
         activeTabKey : Mkn.home,
         btnActions : this.defaultBtnActions,
         btnStatus : this.defaultBtnStatus,
-        collapsed: true,
+        collapsed: false,
         
         };
 
@@ -148,10 +148,18 @@ export default class App extends React.Component<{},IAppStates> {
 
 
     private toggle = () => {
+
+        // console.log($("#menuSider").width()) 
+
         this.setState({
           collapsed: !this.state.collapsed,
         });
-      }
+
+        setTimeout(() => {
+            // console.log($("#menuSider").width());
+            $(this.tabs).tabs("resize");
+        }, 300);
+    }
 
     private activate = (param :SelectParam )=>{
 

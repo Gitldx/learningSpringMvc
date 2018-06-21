@@ -118,6 +118,7 @@ http://mybatis.org/schema/mybatis-spring.xsd"
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="multipleDataSource" />
+        <property name="mapperLocations" value="classpath*:mappers/**/*.xml" />
     </bean>
 
     <mybatis:scan base-package="com.f.ldx.repository" factory-ref="sqlSessionFactory"/>
@@ -130,4 +131,7 @@ http://mybatis.org/schema/mybatis-spring.xsd"
         <!--<property name="sqlSessionFactory" ref="sqlSessionFactory" />-->
     <!--</bean>-->
 
+    <bean class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
 </beans>
