@@ -1,7 +1,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.f.ldx.domain">
-    <resultMap type="com.f.ldx.domain.Voucher" id="voucher">
+    <resultMap type="Voucher" id="voucher">
         <id column="id" property="id"/>
         <result column="bookId" property="bookId"/>
         <result column="year" property="year"/>
