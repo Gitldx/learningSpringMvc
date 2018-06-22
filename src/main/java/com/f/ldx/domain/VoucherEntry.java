@@ -7,7 +7,7 @@ public class VoucherEntry {
     private int voucherId;
     private int accountId;
     private String summary;
-    private BigDecimal amount;
+    private String amount;
     private Boolean balanceSide;
     private int rowNum;
 
@@ -43,11 +43,11 @@ public class VoucherEntry {
         this.summary = summary;
     }
 
-    public BigDecimal getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
