@@ -1,8 +1,14 @@
-div.amountSpan,
-div.amountCol {
-  background-image: url("/lib/static/amountSeprator2.png");
+div.amountSpan {
+  background-image: url("/l5ib/static/amountSeprator2.png");
+}
+.amountSpan > span {
+  display: inline-block;
+  width: 10.9px;
+  text-align: center;
+  /* border-top: 1px solid lightgray */
 }
 div.amountCol {
+  background-image: url("/l5ib/static/amountSeprator2.png");
   height: 39px;
   align-items: center;
   display: flex;
@@ -19,12 +25,6 @@ div.amountCol > div > span {
   display: inline-block;
   width: 10.9px;
   font-size: 14px;
-  text-align: center;
-  /* border-top: 1px solid lightgray */
-}
-.amountSpan > span {
-  display: inline-block;
-  width: 10.9px;
   text-align: center;
   /* border-top: 1px solid lightgray */
 }

@@ -59,7 +59,7 @@ export default class EjqAlert extends React.Component<Iprops,{message:string}>{
 
     public show(message : string){
         $(this.winElm).window("open");
-        $(this.winElm).window("center");
+        $(this.winElm).window("vcenter");
 
         this.setState(()=> ({message}));
         // ReactDOM.unmountComponentAtNode(this.contentDiv);

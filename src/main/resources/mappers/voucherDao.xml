@@ -29,7 +29,7 @@
 
     <insert id="insertEntries" useGeneratedKeys="true"
             keyProperty="id">
-        insert into VoucherEntries(VoucherId ,AccountId ,Summary ,Amount ,BalanceSide ,RowNum)VALUES
+        insert into VoucherEntries(VoucherId ,AccountId ,Summary ,Amount ,BalanceSide ,RowNum) values
         <foreach item="item" collection="list" separator=",">
             (#{item.voucherId}, #{item.accountId}, #{item.summary}, #{item.amount},#{item.balanceSide},#{item.rowNum})
         </foreach>

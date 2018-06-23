@@ -252,8 +252,7 @@ export class VoucherHeader extends React.Component<IProps,{}>{
                     balanceSide : !value.DebitAmount ? true : false,
                     rowNum : rowIndex
                 }
-            ))
-            
+            )) 
           };
         HttpSend.post("/pz/add",body,
             (responseJsonData)=>{

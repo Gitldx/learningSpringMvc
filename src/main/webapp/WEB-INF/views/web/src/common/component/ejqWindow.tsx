@@ -56,7 +56,7 @@ private winElm : HTMLElement;
     public show(){
         $(this.winElm).window("open");
 
-        $(this.winElm).window("center");
+        $(this.winElm).window("vcenter");
         
         ReactDOM.unmountComponentAtNode(this.contentDiv);
 

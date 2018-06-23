@@ -113,8 +113,8 @@ export default class App extends React.Component<{},IAppStates> {
                             <ToolBar {...toolBarProps}/>
                         </Col>
                     </Header>
-                    <Content id="mainContent" style={{ margin: '0 1px',height: "100%" }}>
-                        <div style={{ padding: 1, background: '#fff',height: "100%"  }}>
+                    <Content id="mainContent" style={{ margin: '0',height: "100%" }}>
+                        <div style={{ padding: 0, background: '#fff',height: "100%"  }}>
                             {this.renderTab()}        
                         </div>
                     </Content>
