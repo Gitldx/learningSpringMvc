@@ -3,7 +3,9 @@
 import * as React from "react";
 import Pzgird from "./pzgrid"
 
+import {HttpSend} from '../common/util/httpHelper'
 import VoucherModel from './VoucherModel'
+
 
 
 interface IProps{Vouhcer : VoucherModel};
@@ -68,34 +70,34 @@ export class VoucherHeader extends React.Component<IProps,{}>{
 
             <div className="VoucherTitle">
 
-            <div className="left">
-                
-                <input ref={el => this.yearInputElm = el}  style={{width:"60px",height:"20px"}} />
-                <span className="label">年</span>
-                
-                <input ref={el => this.periodInputElm = el}  min="1"  max="12" style={{width:"45px",height:"20px"}} />
-                <span className="label" >期</span>
+                <div className="left">
+                    
+                    <input ref={el => this.yearInputElm = el}  style={{width:"60px",height:"20px"}} />
+                    <span className="label">年</span>
+                    
+                    <input ref={el => this.periodInputElm = el}  min="1"  max="12" style={{width:"45px",height:"20px"}} />
+                    <span className="label" >期</span>
 
-                <span className="label">日期</span>
-                <input ref={el => this.dateInputElm = el} type="text" style={{width:"100px",height:"20px"}}/>
+                    <span className="label">日期</span>
+                    <input ref={el => this.dateInputElm = el} type="text" style={{width:"100px",height:"20px"}}/>
 
-            </div>
+                </div>
 
-            <span id="voucherBrand">XXXX</span>
+                <span id="voucherBrand">XXXX</span>
 
-        
+            
 
-            <div className="right">
-                
-                <input ref={el => this.attachNumInputElm = el}  min="1"  style={{width:"45px",height:"20px"}} />
-                <span className="label">附件数</span>
-                
-                <input ref={el => this.voucherhNumInputElm = el}   min="1"  style={{width:"60px",height:"20px"}} />
-                <span className="label">号</span>
-                
-                <input ref={el => this.voucherTypeInputElm = el} style={{width:"50px",height:"20px"}}/>
-                <span className="label">字</span>
-            </div>
+                <div className="right">
+                    
+                    <input ref={el => this.attachNumInputElm = el}  min="1"  style={{width:"45px",height:"20px"}} />
+                    <span className="label">附件数</span>
+                    
+                    <input ref={el => this.voucherhNumInputElm = el}   min="1"  style={{width:"60px",height:"20px"}} />
+                    <span className="label">号</span>
+                    
+                    <input ref={el => this.voucherTypeInputElm = el} style={{width:"50px",height:"20px"}}/>
+                    <span className="label">字</span>
+                </div>
 
             </div>
         </div>
@@ -232,40 +234,71 @@ export class VoucherHeader extends React.Component<IProps,{}>{
 
     private saveHandler(){
         const v = this.props.Vouhcer;
-        const myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-        fetch("/pz/add",{
-            method:'POST',
-            headers:myHeaders,
-            body:JSON.stringify({
-                voucher:{
-                    year:v.Year,
-                    period:v.Period,
-                    voucherDate : v.VoucherDate,
-                    voucherType : v.VoucherType,
-                    voucherNum : v.VoucherNum
-                },
-                entries:this.voucherDg.Entries.rows.map((value,rowIndex)=>(
-                    {
-                        id:value.EntryId,
-                        voucherId : 0,
-                        accountId : value.Account,
-                        summary : value.Summary,
-                        amount : !value.DebitAmount ? value.CreditAmount : value.DebitAmount,
-                        balanceSide : !value.DebitAmount ? true : false,
-                        rowNum : rowIndex
-                    }
-                ))
-                
-              })
+        const body = {
+            voucher:{
+                year:v.Year,
+                period:v.Period,
+                voucherDate : v.VoucherDate,
+                voucherType : v.VoucherType,
+                voucherNum : v.VoucherNum
+            },
+            entries:this.voucherDg.Entries.rows.map((value,rowIndex)=>(
+                {
+                    id:value.EntryId,
+                    voucherId : 0,
+                    accountId : value.Account,
+                    summary : value.Summary,
+                    amount : !value.DebitAmount ? value.CreditAmount.toString() : value.DebitAmount.toString(),
+                    balanceSide : !value.DebitAmount ? true : false,
+                    rowNum : rowIndex
+                }
+            ))
+            
+          };
+        HttpSend.post("/pz/add",body,
+            (responseJsonData)=>{
+            alert("请求成功");},(error)=>{
+            alert(error);}
+        )
 
-        }).then((response)=>response.json())
-        .then((responseJsonData)=>{
-          alert("请求成功");
+        // const myHeaders = new Headers();
+        // myHeaders.append('Content-Type', 'application/json');
+        // fetch("/pz/add",{
+        //     method:'POST',
+        //     headers:myHeaders,
+        //     body:JSON.stringify({
+        //         voucher:{
+        //             year:v.Year,
+        //             period:v.Period,
+        //             voucherDate : v.VoucherDate,
+        //             voucherType : v.VoucherType,
+        //             voucherNum : v.VoucherNum
+        //         },
+        //         entries:this.voucherDg.Entries.rows.map((value,rowIndex)=>(
+        //             {
+        //                 id:value.EntryId,
+        //                 voucherId : 0,
+        //                 accountId : value.Account,
+        //                 summary : value.Summary,
+        //                 amount : !value.DebitAmount ? value.CreditAmount.toString() : value.DebitAmount.toString(),
+        //                 balanceSide : !value.DebitAmount ? true : false,
+        //                 rowNum : rowIndex
+        //             }
+        //         ))
+                
+        //       })
+
+        // }).then((response)=>response.json())
+        // .then((responseJsonData)=>{
+        //   alert("请求成功");
           
-        })
-        .catch((error)=>{
-          alert(error);
-        })
+        // })
+        // .catch((error)=>{
+        //   alert(error);
+        // })
     }
+
+
+
+
 }
