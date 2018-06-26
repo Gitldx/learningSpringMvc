@@ -3,14 +3,20 @@
 import * as React from 'react';
 
 
-import { Col,Input,Row,Select } from 'antd';
+import { Col,DatePicker,Row } from 'antd';
 import IQueryParameter from './queryParameter'
+
+
+import * as moment from 'moment';
+import 'moment/locale/zh-cn';
+
+
 
 import ICallback from './ICallback'
 
-const Option = Select.Option;
 
 
+const { MonthPicker } = DatePicker;
 
 export default class QueryPZ extends React.Component<ICallback> implements IQueryParameter{
 
@@ -22,11 +28,12 @@ export default class QueryPZ extends React.Component<ICallback> implements IQuer
             <React.Fragment>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <Input onChange={this.inputChanged}/>
+                        <MonthPicker size={"small"} placeholder="起始期间"  defaultValue={moment("2018/08","YYYY/MM")}/>
+                        {/* <Input onChange={this.inputChanged}/> */}
                     </Col>
 
                     <Col span={12}>
-                    <Select
+                    {/* <Select
                         showSearch ={true}
                         style={{width:"100%"}}
                         placeholder="Select a person"
@@ -38,7 +45,8 @@ export default class QueryPZ extends React.Component<ICallback> implements IQuer
                         <Option value="jack">Jack</Option>
                         <Option value="lucy">Lucy</Option>
                         <Option value="tom">Tom</Option>
-                    </Select>
+                    </Select> */}
+                        <MonthPicker size={"small"} placeholder="截止期间" />
                     </Col>
                 </Row>
                 <Row gutter={16} style={{marginTop:"10px"}}>
@@ -71,22 +79,22 @@ export default class QueryPZ extends React.Component<ICallback> implements IQuer
     }
 
     
-    private inputChanged =(e)=>{
-        this.inputText = e.target.value;
-    }
+    // private inputChanged =(e)=>{
+    //     this.inputText = e.target.value;
+    // }
 
-    private filterHandlder = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    // private filterHandlder = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
-    private handleChange=(value) =>{
-        console.log(`selected ${value}`);
-        this.selectValue = value;
-      }
+    // private handleChange=(value) =>{
+    //     console.log(`selected ${value}`);
+    //     this.selectValue = value;
+    //   }
       
-    private handleBlur() {
-        console.log('blur');
-      }
+    // private handleBlur() {
+    //     console.log('blur');
+    //   }
       
-    private handleFocus() {
-        console.log('focus');
-      }
+    // private handleFocus() {
+    //     console.log('focus');
+    //   }
 }

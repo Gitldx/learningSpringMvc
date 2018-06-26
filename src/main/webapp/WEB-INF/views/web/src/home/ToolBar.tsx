@@ -219,9 +219,11 @@ export default class ToolBar extends React.Component<Iprops,{queryOpen : boolean
       case Mkn.home:
         break;
       case Mkn.ztInfo :
-        return <QueryPZ ref={el=>this.queryComponent = el} queryCallBack = {this.query} cancelCallBack = {this.queryCancel}/>;
-      case Mkn.km :
         return <QueryMxz ref={el=>this.queryComponent = el} queryCallBack = {this.query} cancelCallBack = {this.queryCancel}/>;
+      case Mkn.km :
+        return <QueryPZ ref={el=>this.queryComponent = el} queryCallBack = {this.query} cancelCallBack = {this.queryCancel}/>;
+      case Mkn.dopz :
+        return <QueryPZ ref={el=>this.queryComponent = el} queryCallBack = {this.query} cancelCallBack = {this.queryCancel}/>;
       
     }
     return null;
