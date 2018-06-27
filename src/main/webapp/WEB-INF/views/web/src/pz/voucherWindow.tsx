@@ -90,8 +90,10 @@ export class VoucherWindow extends React.Component<{},IState>{
 
     private winClick(e:MouseEvent){
         if(!this.pzDatagrid){return;}
-        
-            this.datagridRectXY = $($("div.panel.datagrid.panel-htop").get(0)).find("div.datagrid-body")[1].getBoundingClientRect();
+
+
+            this.datagridRectXY = $($("#vwin").find("div.panel.datagrid.panel-htop").get(0)).find("div.datagrid-body")[1].getBoundingClientRect();
+            // this.datagridRectXY = $($("div.panel.datagrid.panel-htop").get(0)).find("div.datagrid-body")[1].getBoundingClientRect();
             // $("div.panel.datagrid.panel-htop").get(0).getBoundingClientRect();
             
             const leftX = this.datagridRectXY.left;
@@ -103,13 +105,14 @@ export class VoucherWindow extends React.Component<{},IState>{
             const mouseY = e.clientY;
     
             const isInXY = mouseX > leftX && mouseY > leftY && mouseX < rightX && mouseY < rightY;
-    
+            // console.log(`leftx:${leftX},lefty:${leftY},rightx:${rightX},righty:${rightY},mousex:${mouseX},mouseY:${mouseY},isInXY:${isInXY}`)
             const $dg = $(this.pzDatagrid.tableElm);
     
             // const cell = $dg.datagrid("cell");
             
     
             if (!isInXY && $dg.datagrid("cell")) {
+                // console.log("!IsInXY")
                 const cell = $dg.datagrid("cell");
                 $dg.datagrid('endEdit', cell.index);
 

@@ -1,14 +1,41 @@
 import * as React from "react";
 
+
+import EqjDatagrid from '../common/component/ejqDatagrid'
 import {VoucherWindow} from './voucherWindow'
+
 
 
 export default class List extends React.Component{
 
     private vw : VoucherWindow
+    private columns = [
+        {field : "date",title :"日期",width:100},
+        {field : "year",title :"年度",width:100},
+        {field : "period",title :"期间",width:100},
+        {field : "voucherType",title :"凭证字",width:100},
+        {field : "voucherNo",title :"凭证号",width:100},
+        {field : "create",title :"制单人",width:100},
+        {field : "modify",title :"修改人",width:100},
+        {field : "audit",title :"审核人",width:100}
+    ];
+
+    private datasource = [
+        {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"123",create :"zz",modify : "fdf",audit : "fsd"},
+        {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"125",create :"zz",modify : "fdf",audit : "fsd"},
+        {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"129",create :"zz",modify : "fdf",audit : "fsd"},
+    ];
 
     constructor(props:{}){
         super(props);
+        console.time()
+        for(let i = 1;i<50;i++){
+            this.datasource.push(
+                {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:i.toString(),create :"zz",modify : "fdf",audit : "fsd"}
+            )
+        }
+
+        console.timeEnd();
 
         this.setEuiControl();
 
@@ -19,11 +46,16 @@ export default class List extends React.Component{
     public render(){
         return (
             <React.Fragment>
-                <button onClick={this.test}>test</button>
+                {/* <button onClick={this.test}>test</button> */}
+                <EqjDatagrid columns = {this.columns} datasource = {this.datasource} onDblClickRow = {this.datagridDbClick}/>
                 <VoucherWindow ref={el=>this.vw = el}/>
             </React.Fragment>
             
         )
+    }
+
+    private datagridDbClick=(index:number,row:any)=>{
+        alert(row);
     }
 
     private add=()=>{
@@ -33,12 +65,12 @@ export default class List extends React.Component{
         }, 100);
     }
 
-    private test=()=>{
-        this.vw.closeWindow();
-        setTimeout(() => {
-            this.vw.showWindow();
-        }, 100);
-    }
+    // private test=()=>{
+    //     this.vw.closeWindow();
+    //     setTimeout(() => {
+    //         this.vw.showWindow();
+    //     }, 100);
+    // }
 
     private setEuiControl(){
         $.extend(($.fn.datagrid as any).defaults.editors, {

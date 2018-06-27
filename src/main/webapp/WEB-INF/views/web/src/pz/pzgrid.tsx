@@ -208,7 +208,7 @@ export default class Pzgrid extends React.Component<{},{}>{
 
 
 
-    private creditAmount = {
+    private creditAmountColumnProperty = {
         field: 'CreditAmount', title: '<div>XXXX</div>'+this.amountHeadSpan, width: 120, align: 'right',resizable:false,
          editor: { type: 'numberbox',options:{precision:2,height:this.cellHeight
             ,onChange:(newValue:number,oldValue:number)=>{
@@ -229,7 +229,7 @@ export default class Pzgrid extends React.Component<{},{}>{
 
 
     private datagridColumn = [
-        [this.sumaryColumnProperty,this.accountColumnProperty,this.debitAmountColumnProperty,this.creditAmount]
+        [this.sumaryColumnProperty,this.accountColumnProperty,this.debitAmountColumnProperty,this.creditAmountColumnProperty]
     ]
 
 
