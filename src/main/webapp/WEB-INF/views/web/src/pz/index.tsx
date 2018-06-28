@@ -7,10 +7,13 @@ import List from './list'
 // import './finance.less'
 
 
+
 ReactDOM.render(
-    <List />,
+    <List/>,
     document.getElementById('root') as HTMLElement
 );
+
+
 
 
 

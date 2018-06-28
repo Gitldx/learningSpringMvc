@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import * as ReactDOM from 'react-dom';
 
 import EqjDatagrid from '../common/component/ejqDatagrid'
 import {VoucherWindow} from './voucherWindow'
@@ -8,6 +8,7 @@ import {VoucherWindow} from './voucherWindow'
 
 export default class List extends React.Component{
 
+    private rctInput : React.Component;
     private vw : VoucherWindow
     private columns = [
         {field : "date",title :"日期",width:100},
@@ -109,6 +110,28 @@ export default class List extends React.Component{
                 resize: (target, width)=> {
                     $(target).textbox('resize', width);
                 }
+            },
+            rctInput :{
+                init: (container, options)=> {
+                    const input = <RctInput ref={el=>this.rctInput = el}/>;
+                    ReactDOM.render(input,container[0])
+                    return input;
+                },
+                destroy: (target)=> {
+                    
+                    const elm =  $(ReactDOM.findDOMNode(this.rctInput)).parent("td")[0];
+                    console.log(elm);
+                    ReactDOM.unmountComponentAtNode(elm);
+                },
+                getValue: (target)=> {
+                    return "12";
+                },
+                setValue: (target, value)=> {
+                    return;
+                },
+                resize: (target, width)=> {
+                    return;
+                }
             }
         });
 
@@ -119,5 +142,13 @@ export default class List extends React.Component{
         //     const d = date.getDate();
         //     return y +'/'+ m +'/'+ d;
         // }
+    }
+}
+
+
+class RctInput extends React.Component{
+
+    public render(){
+        return <input style={{color:"red"}}/>
     }
 }

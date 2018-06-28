@@ -97,7 +97,7 @@ export default class App extends React.Component<{},IAppStates> {
         return (
             <Layout style={{ minHeight: '100vh' }} >
                 <Sider {...siderProps} style={{ overflow: 'auto', height: '100vh'}}>
-                    <div className="logo">小黎财务</div>
+                    <div className="logo">XXXX</div>
                     {this.renderMenus()}
                 </Sider>
                 <Layout>

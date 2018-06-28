@@ -210,11 +210,12 @@ export default class Pzgrid extends React.Component<{},{}>{
 
     private creditAmountColumnProperty = {
         field: 'CreditAmount', title: '<div>XXXX</div>'+this.amountHeadSpan, width: 120, align: 'right',resizable:false,
-         editor: { type: 'numberbox',options:{precision:2,height:this.cellHeight
-            ,onChange:(newValue:number,oldValue:number)=>{
-                return
-            }
-        }},
+        //  editor: { type: 'numberbox',options:{precision:2,height:this.cellHeight
+        //     ,onChange:(newValue:number,oldValue:number)=>{
+        //         return
+        //     }
+        // }},
+        editor : {type :'rctInput'},
         formatter:(value:number,rowData:VoucherEntryModel,rowIndex:number)=>{
             if(!rowData.IsFooter){
                 return this.conv2NumSpan(value);
