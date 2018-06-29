@@ -5,9 +5,8 @@ export class AccountModel{
     public children : AccountModel[] = [];
 
     constructor(public Id : number,private accountCode : string,public AccountName:string,public AccountType : AccountTypeEnum,private balanceSide : BalanceSideEnum,
-        private isJournal : boolean,public Level : number){
-
-    }
+        private isJournal : boolean,public Level : number,public IsDetailed? : boolean)
+        {}
 
 
 

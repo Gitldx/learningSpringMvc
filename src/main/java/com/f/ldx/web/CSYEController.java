@@ -9,6 +9,6 @@ public class CSYEController {
 
     @RequestMapping()
     public String listAccounts(){
-        return "addAccount";
+        return "csye";
     }
 }
