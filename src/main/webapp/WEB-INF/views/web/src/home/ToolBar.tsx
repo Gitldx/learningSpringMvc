@@ -12,6 +12,7 @@ import IQueryParameter from './queryComponent/queryParameter'
 
 import {MenuKeyName as Mkn} from './constants'
 
+
 const ButtonGroup = Button.Group;
 
 
@@ -28,7 +29,9 @@ export class BtnActions{
 
 interface Iprops {actions : BtnsStatus,btnActions : BtnActions,activeTabKey : string}
 
-export default class ToolBar extends React.Component<Iprops,{queryOpen : boolean}>{
+interface IStates{queryOpen : boolean}
+
+export default class ToolBar extends React.Component<Iprops,IStates>{
 
   private queryBtn : Button ;
   private popupCtrl : HTMLElement;
@@ -126,6 +129,9 @@ export default class ToolBar extends React.Component<Iprops,{queryOpen : boolean
   }
 
 
+  public shouldComponentUpdate(nextProps:Iprops, nextState: IStates) {
+    return !(this.props.activeTabKey === nextProps.activeTabKey && this.state.queryOpen === nextState.queryOpen);
+  }
 
 
   public componentDidUpdate(){
@@ -187,7 +193,7 @@ export default class ToolBar extends React.Component<Iprops,{queryOpen : boolean
 
   private query=()=>{
     console.log(this.queryComponent.qparams());
-    // this.props.btnActions.query(this.queryComponent.qparams());
+    this.props.btnActions.query(this.queryComponent.qparams());
     
   }
 

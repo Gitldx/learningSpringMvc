@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 
-import { Col,DatePicker,Row } from 'antd';
+import { Col,DatePicker,Input,Row } from 'antd';
 import IQueryParameter from './queryParameter'
 
 
@@ -11,64 +11,72 @@ import * as moment from 'moment';
 import 'moment/locale/zh-cn';
 
 
+const lineItemStyle = {
+    marginTop : "10px",
+}
 
+// const InputGroup = Input.Group;
+import { MonthPickerProps } from 'antd/lib/date-picker/interface';
 import ICallback from './ICallback'
-
 
 
 const { MonthPicker } = DatePicker;
 
-export default class QueryPZ extends React.Component<ICallback> implements IQueryParameter{
+export default class QueryPZ extends React.Component<ICallback,{inputNumber : string}> implements IQueryParameter{
 
-    private inputText : string = "";
-    private selectValue : string = "";
+    // private inputNumber : string = "";
+    private selectBeginMonth : string = undefined;
+    private beginM : React.Component<MonthPickerProps>
+    private selectEndMonth : string = undefined;
+
+    constructor(props : ICallback){
+        super(props);
+        this.state = {
+            inputNumber : ""
+        }
+    }
 
     public render(){
         return (
             <React.Fragment>
-                <Row gutter={16}>
-                    <Col span={12}>
-                        <MonthPicker size={"small"} placeholder="起始期间"  defaultValue={moment("2018/08","YYYY/MM")}/>
-                        {/* <Input onChange={this.inputChanged}/> */}
-                    </Col>
 
-                    <Col span={12}>
-                    {/* <Select
-                        showSearch ={true}
-                        style={{width:"100%"}}
-                        placeholder="Select a person"
-                        optionFilterProp="children"
-                        onChange={this.handleChange}
-                        onFocus={this.handleFocus}
-                        onBlur={this.handleBlur}
-                        filterOption={this.filterHandlder}>
-                        <Option value="jack">Jack</Option>
-                        <Option value="lucy">Lucy</Option>
-                        <Option value="tom">Tom</Option>
-                    </Select> */}
-                        <MonthPicker size={"small"} placeholder="截止期间" />
-                    </Col>
-                </Row>
+                
+                <div>
+                    
+                    <MonthPicker ref={el=>this.beginM = el} style={{width:"49%",display:"inline-block",textAlign:"left"}} onChange={this.onBeginPChanged} placeholder="起始期间"  defaultValue={moment("2018/08","YYYY/MM")}/>
+                    
+                    <div style={{width:"2%",display:"inline-block"}}/>
+                    
+                    <MonthPicker style={{width:"49%",display:"inline-block",textAlign:"right"}} onChange = {this.onEndPChanged}  placeholder="截止期间" />
+                    
+                </div>
+                
+                <div style = {lineItemStyle}>
+                 <Input  placeholder="输入凭证号，或凭证号范围，例如1,4,6,1-10" value={this.state.inputNumber} onChange={this.inputNumChanged}/>
+                 </div>
+                
                 <Row gutter={16} style={{marginTop:"10px"}}>
                     <Col span={12}>
-                        {/* <Button onClick={this.props.queryCallBack}>查询</Button> */}
+                        
                         <a id="addAccBtn" style={{margin:"5px 0",width:"100px"}}  href='javascript:void(0)' onClick={this.props.queryCallBack}>查询</a>
                     </Col>
                     <Col span={12}>
-                        {/* <Button>取消</Button> */}
+                        
                         <a id="cancelBtn" style={{margin:"5px 0",width:"100px"}}  href='javascript:void(0)' onClick={this.props.cancelCallBack}>取消</a>
                     </Col>
                 </Row>
-            
+                
+
             </React.Fragment>
         )
     }
 
 
     public qparams(){
+        console.log(this.beginM.props.defaultValue.year() + "-" + this.beginM.props.defaultValue.month()+1);
+        const [beginP,endP,num] = [this.selectBeginMonth || this.beginM.props.defaultValue.year() + "-" + this.beginM.props.defaultValue.month()+1 ,this.selectEndMonth,this.state.inputNumber]
         return {
-            val1 : this.inputText,
-            val2: this.selectValue
+            beginP,endP,num
         }
     }
 
@@ -79,9 +87,18 @@ export default class QueryPZ extends React.Component<ICallback> implements IQuer
     }
 
     
-    // private inputChanged =(e)=>{
-    //     this.inputText = e.target.value;
-    // }
+    private inputNumChanged =(e)=>{
+        this.setState({inputNumber : e.target.value})
+    }
+
+
+    private onBeginPChanged=(date, dateString)=>{
+        this.selectBeginMonth = dateString   
+    }
+
+    private onEndPChanged = (date, dateString)=>{
+        this.selectEndMonth = dateString ;  
+    }
 
     // private filterHandlder = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
@@ -98,3 +115,5 @@ export default class QueryPZ extends React.Component<ICallback> implements IQuer
     //     console.log('focus');
     //   }
 }
+
+

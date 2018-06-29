@@ -41,6 +41,7 @@ export default class List extends React.Component{
         this.setEuiControl();
 
         (window as any).addAction = this.add;
+        (window as any).queryAction = this.queryAction;
     }
 
 
@@ -56,7 +57,10 @@ export default class List extends React.Component{
     }
 
     private datagridDbClick=(index:number,row:any)=>{
-        alert(row);
+        this.vw.closeWindow();
+        setTimeout(() => {
+            this.vw.showWindow();
+        }, 100);
     }
 
     private add=()=>{
@@ -64,6 +68,14 @@ export default class List extends React.Component{
         setTimeout(() => {
             this.vw.showWindow();
         }, 100);
+    }
+
+    private queryAction=({beginP,endP,num})=>{
+        console.log(`subwindow : ${beginP}`);
+        setTimeout(() => {
+            (parent.window as any).notify({type:"loaded",value:true});
+        }, 3000);
+        
     }
 
     // private test=()=>{

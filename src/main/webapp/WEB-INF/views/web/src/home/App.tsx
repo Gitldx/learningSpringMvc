@@ -10,7 +10,7 @@ import ToolBar,{BtnActions,BtnsStatus} from './ToolBar'
 
 
 
-import {Col,Icon,Layout,Menu } from 'antd';
+import {Col,Icon,Layout,Menu,Spin } from 'antd';
 
 import {SelectParam} from 'antd/lib/menu'
 
@@ -20,7 +20,8 @@ interface IAppStates{
     collapsed:boolean,
     btnStatus: BtnsStatus,
     btnActions :BtnActions,
-    activeTabKey : string
+    activeTabKey : string,
+    loading : boolean
 }
 
 const { Header, Content, Sider } = Layout;
@@ -53,9 +54,10 @@ export default class App extends React.Component<{},IAppStates> {
         btnActions : this.defaultBtnActions,
         btnStatus : this.defaultBtnStatus,
         collapsed: false,
-        
+        loading : false
         };
 
+        (window as any).subwindowMsg = this.subwindowMsg;
         
     }
 
@@ -77,9 +79,6 @@ export default class App extends React.Component<{},IAppStates> {
 
     public render() {
 
-        
-        
-        
         const siderProps = {
             trigger:null,
             collapsible:true,
@@ -95,11 +94,13 @@ export default class App extends React.Component<{},IAppStates> {
         }
 
         return (
+            <Spin spinning={this.state.loading} size="large">
             <Layout style={{ minHeight: '100vh' }} >
                 <Sider {...siderProps} style={{ overflow: 'auto', height: '100vh'}}>
                     <div className="logo">XXXX</div>
                     {this.renderMenus()}
                 </Sider>
+                
                 <Layout>
                     <Header style={{ background: '#fff', padding: 0}} >
                         <Col span={1}>
@@ -124,9 +125,12 @@ export default class App extends React.Component<{},IAppStates> {
                     {/* <Footer style={{ textAlign: 'center'}} >
                         小黎财务 ©2016 Created by 禅格科技
                     </Footer> */}
+                     
                 </Layout>
+                
                 {/* <Sider width={100}>s</Sider> */}
             </Layout>
+            </Spin>
             );
     }
 
@@ -145,6 +149,15 @@ export default class App extends React.Component<{},IAppStates> {
 
     //     this.setState({ collapsed });
     // }
+
+
+    private subwindowMsg = ({type,value})=>{
+        switch (type){
+            case "loaded" :
+            this.setState({loading : !value})
+            break;
+        }
+    }
 
 
     private toggle = () => {
@@ -245,11 +258,15 @@ export default class App extends React.Component<{},IAppStates> {
             ($("#" + frameKey)[0] as any).contentWindow.addAction();
         }
         this.defaultBtnActions.query = (param)=>{
+            this.setState({loading : true});
             ($("#" + frameKey)[0] as any).contentWindow.queryAction(param);
+            
         }
         this.defaultBtnActions.delete = ()=>{
             ($("#" + frameKey)[0] as any).contentWindow.deleteAction();
         }
+
+        
     }
 
 
@@ -303,6 +320,7 @@ export default class App extends React.Component<{},IAppStates> {
     }
 
   
+    
 }
 
 
