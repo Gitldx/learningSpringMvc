@@ -4,25 +4,26 @@ import EditModel from './editModel'
 
 import {AccountModel, AccountTypeEnum, BalanceSideEnum} from '../account/AccountModel'
 
-
+import EjqEditDatagrid from '../common/component/ejqEditDatagrid'
 
 
 export default class Edit extends React.Component{
 
-    private datagridRectXY:any;
 
-    private tableElm : HTMLElement;
+    private editDatagrid : EjqEditDatagrid;
 
     private dataSource : EditModel[] = [];
 
     private datagridProperty = {
         
-        
-        data:this.dataSource,
-        showFooter : true,
+        showFooter : false,
         
         fitColumns:true,
         autoRowHeight:false,
+
+    }
+
+    private datagridEventHandlers ={
         onBeforeEdit :(index,row : EditModel)=>{
             console.log(row);
             if(!row.IsDetailed){
@@ -76,10 +77,7 @@ export default class Edit extends React.Component{
     ];
 
 
-    private datagridColumn = [
-        this.columns
-    ]
-   
+
 
     constructor(props:{}){
         super(props);
@@ -118,28 +116,22 @@ export default class Edit extends React.Component{
             <div>
                 <button onClick={this.test}>test</button>
                 <button onClick={this.addTest}>addDatasource</button>
-                <table className="easyui-datagrid" 
-                data-options="singleSelect:true" ref={el => this.tableElm = el}/>
+
+                <EjqEditDatagrid ref = {el => this.editDatagrid = el} datasource={this.dataSource}
+                   columnConfigs = {this.columns} singlePropertyConfigs={this.datagridProperty} eventHandlers={this.datagridEventHandlers}/>
             </div>
         )
     }
 
-    public componentDidMount(){
-        this.renderTableElm();
 
-        $(window).bind("click",this.winClick.bind(this));
-    }
 
     private test = ()=>{
-        const data = $(this.tableElm).datagrid("getData");
+        const data = $(this.editDatagrid.TableElm).datagrid("getData");
         const model =(data.rows as EditModel[])[2];
         model.Ljdf = 1009.12;
-        // $(this.tableElm).datagrid("updateRow",{
-        //     index: 2,
-        //     row: model
-        // })
 
-        $(this.tableElm).datagrid("refreshRow",2)
+
+        $(this.editDatagrid.TableElm).datagrid("refreshRow",2)
     }
 
 
@@ -151,54 +143,14 @@ export default class Edit extends React.Component{
         )
         this.dataSource.push(m)
 
-        $(this.tableElm).datagrid("loadData",this.dataSource)
+        $(this.editDatagrid.TableElm).datagrid("loadData",this.dataSource)
     }
 
-    private renderTableElm(){
-        
-        
-        $(this.tableElm).datagrid({
-            ...this.datagridProperty,
-            // onLoadSuccess: this.onDatagridLoadSuccess,
 
-            columns: this.datagridColumn
-            
-            }
-        ).datagrid('enableCellEditing');
-
-    }
 
 
     
 
 
-    private winClick(e:MouseEvent){
-        
-        this.datagridRectXY = $($("div.panel.datagrid.panel-htop").get(0)).find("div.datagrid-body")[1].getBoundingClientRect();
 
-        
-        const leftX = this.datagridRectXY.left;
-        const leftY = this.datagridRectXY.top;
-        const rightX = this.datagridRectXY.right;
-        const rightY = this.datagridRectXY.bottom;
-
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-
-        const isInXY = mouseX > leftX && mouseY > leftY && mouseX < rightX && mouseY < rightY;
-        // console.log(`leftx:${leftX},lefty:${leftY},rightx:${rightX},righty:${rightY},mousex:${mouseX},mouseY:${mouseY},isInXY:${isInXY}`)
-        const $dg = $(this.tableElm);
-
-        // const cell = $dg.datagrid("cell");
-        
-
-        if (!isInXY && $dg.datagrid("cell")) {
-            // console.log("!IsInXY")
-            const cell = $dg.datagrid("cell");
-            $dg.datagrid('endEdit', cell.index);
-
-            $dg.trigger("onEndEdit",[cell.index,cell.field]);
-        }
-    }
-    
 }
