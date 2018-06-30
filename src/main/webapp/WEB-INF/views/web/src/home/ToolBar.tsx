@@ -139,6 +139,9 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
     this.setPopupQuery();
   }
 
+
+ 
+
   private setPopupQuery(){
     const settings = {
       'background': "#fafafa",
@@ -161,7 +164,7 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
     const tarBody = $(this.queryCtrl); // tar.next('div#queryCtrl');
 
     const tarCtrl = $(this.popupCtrl) // $('#popupCtrl');
-
+  
     
     tarBody.css({
       'background': settings.background,
@@ -179,7 +182,9 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
     });
 
     tarCtrl.click( (e)=> {
+      console.log("firefox problem")
       if($(e.target).is("#queryCtrl") || $(e.target).parents("#queryCtrl").length>0){return;}
+
       e.preventDefault();
       const toggleFunc = this.toggleQueryFunc();
       this.setState({queryOpen : !this.state.queryOpen},

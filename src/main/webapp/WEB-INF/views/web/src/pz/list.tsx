@@ -60,20 +60,20 @@ export default class List extends React.Component{
         this.vw.closeWindow();
         setTimeout(() => {
             this.vw.showWindow();
-        }, 100);
+        }, 0);
     }
 
     private add=()=>{
         this.vw.closeWindow();
         setTimeout(() => {
             this.vw.showWindow();
-        }, 100);
+        }, 0);
     }
 
     private queryAction=({beginP,endP,num})=>{
         console.log(`subwindow : ${beginP}`);
         setTimeout(() => {
-            (parent.window as any).notify({type:"loaded",value:true});
+            (parent.window as any).subwindowMsg({type:"loaded",value:true});
         }, 3000);
         
     }
