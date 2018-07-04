@@ -575,7 +575,7 @@ export default class Pzgrid extends React.Component<{},{}>{
         const panel = $(this.tableElm).datagrid("getPanel");
         const myheaderCol = panel.find("div.datagrid-header td[field*=Amount]>div");
         
-        myheaderCol.css({"font-weight":"bold","height":"40px","text-align":"center"});
+        myheaderCol.css({"font-weight":"bold","height":"36px","text-align":"center"});
         
         $(".datagrid-row").mouseover(function(value){
             
