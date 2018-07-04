@@ -1,6 +1,7 @@
 // lessc finance.less ../../build/lib/static/finance.css
 
 @amountbgimage : "myldx.png";
+@rowHeight : 39px;
 
 
 body{
@@ -23,10 +24,10 @@ body{
     div&{
         background-image:url(@amountbgimage);
 
-        height: 39px;
+        height: @rowHeight;
         align-items: center;
         display: flex;
-        margin-right: -6.0px;
+        // margin-right: -6.0px;
         >div{
             display: inline-block;
             margin-left: auto;
@@ -79,39 +80,88 @@ body{
 
 
 
-div.panel.datagrid.panel-htop tr.datagrid-row>td[field=Summary]>div{
-    height: 39px;
-    /* word-break: break-all;
-    white-space:normal; */
-    >pre{
-        height: 39px;
-        white-space: pre-wrap;       /* Since CSS 2.1 */
-        white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-        white-space: -pre-wrap;      /* Opera 4-6 */
-        white-space: -o-pre-wrap;    /* Opera 7 */
-        word-wrap: break-word;       /* Internet Explorer 5.5+ */
-        overflow: hidden;
-        margin-top: 0;
-        margin-bottom: 0;
-    }   
-}   
+// div.panel.datagrid.panel-htop tr.datagrid-row>td[field=Summary]>div{
+//     height: 39px;
+//     /* word-break: break-all;
+//     white-space:normal; */
+//     >pre{
+//         height: 39px;
+//         white-space: pre-wrap;       /* Since CSS 2.1 */
+//         white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+//         white-space: -pre-wrap;      /* Opera 4-6 */
+//         white-space: -o-pre-wrap;    /* Opera 7 */
+//         word-wrap: break-word;       /* Internet Explorer 5.5+ */
+//         overflow: hidden;
+//         margin-top: 0;
+//         margin-bottom: 0;
+//     }   
+// }   
 
 
-div.panel.datagrid.panel-htop tr.datagrid-row{
-    >td[field=Account]{
-        >div{
-            height: 39px;
-            word-break: break-all;
-            white-space:normal;
+// div.panel.datagrid.panel-htop tr.datagrid-row{
+//     >td[field=Account]{
+//         >div{
+//             height: 39px;
+//             word-break: break-all;
+//             white-space:normal;
+//         }
+//     }
+//     >td[field*=Amount]{
+//         >div{
+//             height: 39px;
+//         }
+//     }
+// }
+
+
+div.panel.datagrid.panel-htop{
+
+    div.datagrid-header{
+        td[field*=Amount]{
+            >div.datagrid-cell{
+                padding: 0;
+            }
         }
     }
-    >td[field*=Amount]{
-        >div{
-            height: 39px;
+
+    tr.datagrid-row{
+        >td[field=Summary]>div{
+            height: @rowHeight;
+            >pre{
+                height: @rowHeight;
+                white-space: pre-wrap;       /* Since CSS 2.1 */
+                white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+                white-space: -pre-wrap;      /* Opera 4-6 */
+                white-space: -o-pre-wrap;    /* Opera 7 */
+                word-wrap: break-word;       /* Internet Explorer 5.5+ */
+                overflow: hidden;
+                margin-top: 0;
+                margin-bottom: 0;
+            }   
+        }
+
+        >td[field=Account]{
+            >div{
+                height: @rowHeight;
+                word-break: break-all;
+                white-space:normal;
+            }
+        }
+        >td[field*=Amount]{
+            >div.datagrid-cell{
+                &.datagrid-editable{
+                    width: 119px !important;
+                }
+                padding: 0;
+                height: @rowHeight;
+            }
+            span.textbox.numberbox{
+                padding: 0;
+            }
         }
     }
+    
 }
-
 
 
 
@@ -120,7 +170,7 @@ div.datagrid-footer td[field=Summary]>div{
     font-weight: bold;
     font-size: 18px;
     text-align: center;
-    line-height: 39px;   
+    line-height: @rowHeight;   
 }
 
 div#voucherToolBar div{
@@ -151,7 +201,7 @@ span#voucherBrand{
 div.accountText{
     /* display: inline-block; */
     width: 240px;
-    height: 39px;
+    height: @rowHeight;
     word-break: break-all;
     white-space:normal;
     align-items: center;
