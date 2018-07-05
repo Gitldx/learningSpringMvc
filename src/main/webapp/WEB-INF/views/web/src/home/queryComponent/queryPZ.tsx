@@ -41,7 +41,7 @@ export default class QueryPZ extends React.Component<ICallback,{inputNumber : st
             <React.Fragment>
 
                 
-                <div>
+                <div className="querypopupLineItem">
                     
                     <MonthPicker ref={el=>this.beginM = el} style={{width:"49%",display:"inline-block",textAlign:"left"}} onChange={this.onBeginPChanged} placeholder="起始期间"  defaultValue={moment("2018/08","YYYY/MM")}/>
                     
@@ -51,11 +51,11 @@ export default class QueryPZ extends React.Component<ICallback,{inputNumber : st
                     
                 </div>
                 
-                <div style = {lineItemStyle}>
+                <div style = {lineItemStyle} className="querypopupLineItem">
                  <Input  placeholder="输入凭证号，或凭证号范围，例如1,4,6,1-10" value={this.state.inputNumber} onChange={this.inputNumChanged}/>
                  </div>
                 
-                <Row gutter={16} style={{marginTop:"10px"}}>
+                <Row gutter={16} className="queryControlBtnGrp">
                     <Col span={12}>
                         
                         <a id="addAccBtn" style={{margin:"5px 0",width:"100px"}}  href='javascript:void(0)' onClick={this.props.queryCallBack}>查询</a>

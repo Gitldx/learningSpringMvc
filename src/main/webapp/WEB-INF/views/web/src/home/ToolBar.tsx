@@ -12,6 +12,7 @@ import IQueryParameter from './queryComponent/queryParameter'
 
 import {MenuKeyName as Mkn} from './constants'
 
+// import {getNavType} from '../common/util/navigatorInspector'
 
 const ButtonGroup = Button.Group;
 
@@ -43,12 +44,14 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
   constructor(props : Iprops){
     super(props);
     this.state = {queryOpen : false};
+
+    // alert(getNavType())
   }
 
   public render(){
 
 
-    const iconStyle ={marginRight:"5px"}
+    const iconStyle ={marginRight:"5px",color : "#1890ff"}
     const menu = (
       <Menu>
         <Menu.Item key="1"><Icon type="dashboard" style={iconStyle}/><span>参数设置</span></Menu.Item>
@@ -66,23 +69,11 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
 
 
 
+
     const saveBtn = this.props.actions.Save.Visible ? <Button disabled={this.props.actions.Save.Disable} onClick={this.props.btnActions.save}><Icon type="save" />保存</Button> : null;
     const addBtn = this.props.actions.Add.Visible ? <Button onClick={this.props.btnActions.add}><Icon type="edit" />新建 </Button> : null;
     const deleteBtn = this.props.actions.Delete.Visible ? <Button onClick={this.props.btnActions.delete}><Icon type="delete" />删除 </Button> : null;
-    const searchBtn = this.props.actions.Query.Visible ? 
-    <React.Fragment>
-      <Button ref={el=>this.queryBtn = el} style={{paddingLeft:0,paddingRight:0}}>
-        <div id="popupCtrl" ref={el=>this.popupCtrl = el} style={{display:"inline-block",width:"80px"}}>查询<Icon type={this.state.queryOpen ? "up" : "down"} style={{marginLeft:"8px"}}/>
-          <div id="queryCtrl" ref = {el=>this.queryCtrl = el}>
-              {this.q_component()}
-          </div>
-        </div>
-      </Button> 
-
-      
-    </React.Fragment>
-
-    : null;
+    const searchBtn = this.props.actions.Query.Visible ? this.queryPopupControl(): null;
 
     return (
       
@@ -130,13 +121,26 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
 
 
   public shouldComponentUpdate(nextProps:Iprops, nextState: IStates) {
+    
     return !(this.props.activeTabKey === nextProps.activeTabKey && this.state.queryOpen === nextState.queryOpen);
   }
 
 
+
+
+
   public componentDidUpdate(){
+    
     $(this.popupCtrl).unbind("click");
+
     this.setPopupQuery();
+
+    setTimeout(() => {
+      const isOpen = !$(this.queryCtrl).is(":hidden");
+      if(this.state.queryOpen !== isOpen){
+        this.setState({queryOpen : isOpen});
+      }
+    }, 100);
   }
 
 
@@ -149,8 +153,8 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
       'controller': true,  
       'focusColor': '#1abc9c',
       'iconSize': '100px',
-      'left': '0',
-      'top': '-5',
+      'left': '50',
+      'top': '-10',
       'width': '400px',
     };
     let tempdisplay :string;
@@ -175,14 +179,14 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
       'float': 'left',
       'margin-left': -settings.left,
       'margin-top': -settings.top,
-      'padding': '10px',
+      'padding': '15px',
       'position': 'absolute',
       
       'width': settings.width,
     });
 
     tarCtrl.click( (e)=> {
-      console.log("firefox problem")
+
       if($(e.target).is("#queryCtrl") || $(e.target).parents("#queryCtrl").length>0){return;}
 
       e.preventDefault();
@@ -199,7 +203,7 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
   private query=()=>{
     console.log(this.queryComponent.qparams());
     this.props.btnActions.query(this.queryComponent.qparams());
-    
+
   }
 
   private toggleQueryFunc(){
@@ -215,13 +219,45 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
 
 
   private queryCancel =()=>{
+    
     const toggleFunc = this.toggleQueryFunc();
     this.setState({queryOpen : !this.state.queryOpen},
         ()=>toggleFunc()
       )
   }
 
-  
+ 
+
+  private qBtnClick =()=>{
+    $(this.popupCtrl).trigger("click")
+  }
+
+private queryPopupControl(){
+
+  // const c = this.isFirefox() ?
+  // <Popover content={this.q_component()} trigger="click" visible={this.state.popupvisible} onVisibleChange={this.handleVisibleChange}>
+  //     <Button ref={el=>this.queryBtn = el} >
+  //       <Icon type="search" />查询
+  //     </Button> 
+  //   </Popover>
+  // :
+  const c = 
+  <React.Fragment>
+    <Button ref={el=>this.queryBtn = el} onClick={this.qBtnClick}>
+        查询<Icon type={this.state.queryOpen ? "up" : "down"} style={{marginLeft:"8px"}}/>
+    </Button> 
+    <div id="popupCtrl" ref={el=>this.popupCtrl = el} style={{display:"inline-block"}}>
+      
+      <div id="queryCtrl" ref = {el=>this.queryCtrl = el}>
+          {this.q_component()}
+      </div>
+    </div>
+  </React.Fragment>;
+
+  return c;
+}
+
+
 
 
   private q_component(){

@@ -24,7 +24,7 @@ export default class QueryMxz extends React.Component<ICallback> implements IQue
                     <Col span={12}/>
                     
                 </Row>
-                <Row gutter={16} style={{marginTop:"10px"}}>
+                <Row gutter={16} style={{marginTop:"10px",textAlign:"center",backgroundColor:"red"}}>
                     <Col span={12}>
                         {/* <Button onClick={this.props.queryCallBack}>查询</Button> */}
                         <a id="addAccBtn" style={{margin:"5px 0",width:"100px"}}  href='javascript:void(0)' onClick={this.props.queryCallBack}>查询</a>
