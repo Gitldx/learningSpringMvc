@@ -94,7 +94,30 @@ const menues = new Map<string,IMenueItem>([
         frameKey : "dopzFrame",
         title : "制凭证",
         url : "/pz.html"
+    }],
+    [MenuKeyName.mxz,{
+        btnsStatus : new BtnsStatus(
+            {Visible:false},
+            {Visible:true},
+            {Visible:true},
+            {Visible:true},
+        ),
+        frameKey : "mxzFrame",
+        title : "明细账",
+        url : "/mxz.html"
+    }],
+    [MenuKeyName.zcfzb,{
+        btnsStatus : new BtnsStatus(
+            {Visible:false},
+            {Visible:false},
+            {Visible:false},
+            {Visible:true},
+        ),
+        frameKey : "zcfzbFrame",
+        title : "资产负债表",
+        url : "/zcfzb.html"
     }]
+
 
 ]);
 

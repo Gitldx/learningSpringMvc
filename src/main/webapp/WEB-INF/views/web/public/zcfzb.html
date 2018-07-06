@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+
+    
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+
+    <script src="/lib/JExcel/js/jquery.3.2.1.min.js"></script>
+    <script src="/lib/others/numeral.js"></script>
+    <script src="/lib/JExcel/js/excel-formula.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/lib/JExcel/css/jquery.jexcel.css">
+    
+    <script type="text/javascript" src="/lib/JExcel/js/jquery.jexcel.js"></script>
+
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+
+    <button onclick="test()">test</button>
+    <div id='my-spreadsheet'></div>
+
+    <div id="mys"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+
+    <!-- <script type="text/javascript" src="/lib/React/react.production.min.js"></script>
+    <script type="text/javascript" src="/lib/React/react-dom.production.min.js"></script> -->
+
+
+    <script>
+      
+              // data = [
+              //     ['Mazda', 2001, 2000],
+              //     ['Pegeout', 2010, 5000],
+              //     ['Honda Fit', 2009, 3000],
+              //     ['Honda CRV', 2010, 6000],
+              // ];
+      
+              // $('#my-spreadsheet').jexcel({
+              //     data:data,
+              //     colHeaders: ['Model', 'Price', 'Price' ],
+              //     colWidths: [ 300, 80, 100 ]
+              // });
+      
+        var canCalculate = true;
+      
+        var data = [
+          ['Furnace',1.05,10000,'=B1*C1'],
+          ['Tower',2,6000,'=B2*C2'],
+          ['Drum',3,5000,'=B3*C3'],
+          ['Pump',4,4000,'=B4*C4'],
+          ['Total','=SUM(B1:B4)','=(C1+C2+C3+C4)','=SUM(D1:D4)']
+      ]
+      
+      
+      var data2 = [
+          ['Furnace',1.05,10000,'=B1*C1+33.3'],
+          ['Tower',2,6000,'=B2*C2'],
+          ['Drum',3,5000,'=B3*C3'],
+          ['Pump',4,4000,'=B4*C4'],
+          ['Total','=SUM(B1:B4)','=(C1+C2+C3+C4)','=SUM(D1:D4)']
+      ]
+      
+      $('#my-spreadsheet').jexcel({
+          data:data,
+          columns: [
+              { type:'text' },
+              { type:'numeric' },
+              { type:'numeric' },
+              { type:'numeric' },
+          ],
+          colHeaders: ['Equipment','Quantity', 'Price', 'Total'],
+          colWidths: [ 400, 100, 200 ],
+          colWidths: [300, 150, 150, 150, 150],
+      });
+      
+      $('#my-spreadsheet').jexcel('updateSettings', {
+          cells: function (cell, col, row) {
+              if (col > 0) {
+                  value = $('#my-spreadsheet').jexcel('getValue', $(cell));
+                  var val;
+                  if(canCalculate){//ldx
+                      val = numeral($(cell).text()).format('0,0.00');
+                  }
+                  else{
+                      val = $(cell).text();
+                  }
+                  
+                  $(cell).html('<input type="hidden" value="' + value + '">' + val);
+              }
+          }
+      });
+      
+      
+      // $('#mys').jexcel({
+      //     data:data2,
+      //     columns: [
+      //         { type:'text' },
+      //         { type:'numeric' },
+      //         { type:'numeric' },
+      //         { type:'numeric' },
+      //     ],
+      //     colHeaders: ['Equipment','Quantity', 'Price', 'Total'],
+      //     colWidths: [ 400, 100, 200 ],
+      //     colWidths: [300, 150, 150, 150, 150],
+      // });
+      
+      
+          function test(){
+              // var val = window["D1"]; //$('#my-spreadsheet').jexcel('getData', false);//$('#my-spreadsheet').jexcel('getValue', 'D1');
+              // alert(val);
+
+              canCalculate = !canCalculate;
+
+
+              $('#my-spreadsheet').jexcel({
+                  data:data,
+                  columns: [
+                      { type:'text' },
+                      { type:'numeric' },
+                      { type:'numeric' },
+                      { type:'numeric' },
+                  ],
+                  colHeaders: ['Equipment','Quantity', 'Price', 'Total'],
+                  colWidths: [ 400, 100, 200 ],
+                  colWidths: [300, 150, 150, 150, 150],
+              });
+
+              $('#my-spreadsheet').jexcel('updateSettings', {
+              cells: function (cell, col, row) {
+                  if (col > 0) {
+                      value = $('#my-spreadsheet').jexcel('getValue', $(cell));
+                      var val;
+                      if(canCalculate){//ldx
+                          val = numeral($(cell).text()).format('0,0.00');
+                      }
+                      else{
+                          val = $(cell).text();
+                      }
+                      
+                      $(cell).html('<input type="hidden" value="' + value + '">' + val);
+                  }
+              }
+              });
+          }
+      
+          </script>
+
+  </body>
+</html>
