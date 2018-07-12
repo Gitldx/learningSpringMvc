@@ -244,7 +244,8 @@ export class VoucherHeader extends React.Component<IProps,{}>{
             },
             entries:this.voucherDg.Entries.rows.map((value,rowIndex)=>(
                 {
-                    id:value.EntryId,
+                    // id:value.EntryId,
+                    id:null,
                     voucherId : 0,
                     accountId : value.Account,
                     summary : value.Summary,
@@ -256,7 +257,9 @@ export class VoucherHeader extends React.Component<IProps,{}>{
           };
         HttpSend.post("/pz/add",body,
             (responseJsonData)=>{
-            alert("请求成功");},(error)=>{
+            alert("请求成功");
+            console.log(responseJsonData);
+        },(error)=>{
             alert(error);}
         )
 

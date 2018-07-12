@@ -18,10 +18,13 @@ public class VoucherService {
     @Transactional
     public int addVouhcer(VoucherDTO dto){
 
-        int id =  sessionTemplate.insert("com.f.ldx.domain.insertVoucher",dto.getVoucher());
+        sessionTemplate.insert("com.f.ldx.domain.insertVoucher",dto.getVoucher());
 
-        sessionTemplate.insert("com.f.ldx.domain.insertEntries",dto.getEntries());
+        dto.getEntries().forEach((item)->item.setVoucherId(dto.getVoucher().getId()));
+//        sessionTemplate.insert("com.f.ldx.domain.insertEntries",dto.getEntries());
 
-        return id;
+        dto.getEntries().forEach((item)->sessionTemplate.insert("com.f.ldx.domain.insertEntry",item));
+
+        return dto.getVoucher().getId();
     }
 }

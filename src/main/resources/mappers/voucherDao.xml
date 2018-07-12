@@ -27,12 +27,18 @@
         ,#{modifyMan},GETDATE(),#{docMan})
     </insert>
 
-    <insert id="insertEntries" useGeneratedKeys="true"
+    <insert id="insertEntries" useGeneratedKeys="true" parameterType="VoucherEntry"
             keyProperty="id">
         insert into VoucherEntries(VoucherId ,AccountId ,Summary ,Amount ,BalanceSide ,RowNum) values
-        <foreach item="item" collection="list" separator=",">
+        <foreach item="item" collection="list" index="index" separator=",">
             (#{item.voucherId}, #{item.accountId}, #{item.summary}, #{item.amount},#{item.balanceSide},#{item.rowNum})
         </foreach>
+    </insert>
+
+    <insert id="insertEntry" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into VoucherEntries(VoucherId ,AccountId ,Summary ,Amount ,BalanceSide ,RowNum) values
+        (#{voucherId}, #{accountId}, #{summary}, #{amount},#{balanceSide},#{rowNum})
     </insert>
 
 </mapper>
