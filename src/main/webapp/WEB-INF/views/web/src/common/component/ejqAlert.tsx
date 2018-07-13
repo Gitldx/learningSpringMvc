@@ -99,7 +99,6 @@ export default class EjqAlert extends React.Component<Iprops,{message:string}>{
 
     private docKeydownHandler=(e)=>{
         if(e.keyCode === 13){
-            console.log("enter event")
             e.preventDefault();
             this.close();
         }

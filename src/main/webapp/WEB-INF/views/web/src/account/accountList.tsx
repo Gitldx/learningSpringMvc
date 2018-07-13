@@ -12,6 +12,8 @@ import {AccountModel,AccountTypeEnum,BalanceSideEnum} from "./AccountModel"
 import AccountTreegrid from './accountTreegrid'
 // import Window from "./window"
 
+import {HttpSend} from '../common/util/httpHelper'
+
 
 
 declare let accList : IAccDataJson[];
@@ -212,7 +214,7 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
             accountCode: {
                 validator :(value, param)=> {
                 // const error=false;;
-                if(value.length>3){
+                if(!this.getLevelOfCode(value)){
                         
                         ($.fn as any).validatebox.defaults.rules.accountCode.message ="科目长度不合法";
                     return false;
@@ -431,45 +433,37 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
             return;
         }
 
-        
-        const myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-        fetch("/account/add",{
-            method:'POST',
-            headers:myHeaders,
-            body:JSON.stringify({
-                accountCode:m.AccountCode,
-                accountName:m.AccountName,
-                accountType : m.AccountType,
-                balanceSide : m.BalanceSide,
-                isJournal : m.IsJournal,
-                level : this.getLevelOfCode(m.AccountCode)
-              })
-        }).then((response)=>response.json())
-        .then((responseJsonData)=>{
-            if(responseJsonData.res){
-                
-                this.ejqAlert.info("保存成功");
-                
-                m.Id = responseJsonData.id;
-                switch(m.AccountType){
-                    case AccountTypeEnum.Asset :
-                        $(this.tabs).tabs("select",0);
-                        this.addElementToTreegrid(m);
-                    break;
-                    }
-            }
-            else{
-                
-                this.ejqAlert.warn(responseJsonData.msg);
-            }
+        const body = {
+            accountCode:m.AccountCode,
+            accountName:m.AccountName,
+            accountType : m.AccountType,
+            balanceSide : m.BalanceSide,
+            isJournal : m.IsJournal,
+            level : this.getLevelOfCode(m.AccountCode)
+          };
 
-          
-        })
-        .catch((error)=>{
-            
-            this.ejqAlert.warn(error)
-        })
+        HttpSend.post("/account/add",body,
+            (responseJsonData)=>{
+                if(responseJsonData.res){
+                    
+                    this.ejqAlert.info("保存成功");
+                    
+                    m.Id = responseJsonData.id;
+                    switch(m.AccountType){
+                        case AccountTypeEnum.Asset :
+                            $(this.tabs).tabs("select",0);
+                            this.addElementToTreegrid(m);
+                        break;
+                        }
+                }
+                else{
+                    
+                    this.ejqAlert.warn(responseJsonData.msg);
+                }
+            },(error)=>{
+                this.ejqAlert.warn(error)
+            }
+        )
 
         
     }
