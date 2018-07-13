@@ -22,10 +22,10 @@ public interface KMMapper {
     ArrayList<KM> findByCode(String code);
 
 
-    @Select("select Id,AccountCode,AccountName,AccountType,BalanceSide,IsJournal,IsDetailedAccount from Account where AccountCode = #{code}")
+    @Select("select Id,AccountCode,AccountName,AccountType,BalanceSide,IsJournal,IsDetailedAccount,Level from Account where AccountCode = #{code}")
     KM getByCode(String code);
 
     @Update("UPDATE dbo.Account SET AccountCode=#{accountCode},AccountName=#{accountName},AccountType=#{accountType},BalanceSide= #{balanceSide}," +
-            "IsJournal= #{isJournal},IsDetailedAccount= #{isDetailedAccount},Level= #{isDetailedAccount} WHERE id =#{id}")
+            "IsJournal= #{isJournal},IsDetailedAccount= #{isDetailedAccount},Level= #{level} WHERE id =#{id}")
     void update(KM km);
 }

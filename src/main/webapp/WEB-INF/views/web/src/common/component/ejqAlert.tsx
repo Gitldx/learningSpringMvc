@@ -1,20 +1,20 @@
 /// <reference path="../../jqplugins/plugin.d.ts" />
 
 import * as React from "react";
-// import { ReactElement } from "react";
-// import * as ReactDOM from 'react-dom';
+
 
 interface Iprops{
     
     winOptions? :{
-        width:number,
-        height:number,
-        closed : boolean,
-        resizable:boolean,
-        minimizable:boolean,
-        maximizable:boolean,
-        title:string,
-        modal : boolean
+        width?:number,
+        height?:number,
+        closed? : boolean,
+        resizable?:boolean,
+        minimizable?:boolean,
+        maximizable?:boolean,
+        title?:string,
+        cls?:string,
+        modal? : boolean
     }
     
 }
@@ -24,52 +24,89 @@ interface Iprops{
 export default class EjqAlert extends React.Component<Iprops,{message:string}>{
 
 
-    private winElm : HTMLElement;
+    private warnWinElm : HTMLElement;
+    private infoWinElm : HTMLElement;
     private winOptions :　any
     constructor(props:Iprops){
         super(props);
-        if(!this.props.winOptions){
-            this.winOptions = {width:200,height:100,closed:true,resizable:false,minimizable:false,maximizable:false,
-                collapsible:false,cls:'c3',border:'thin',title:"警告",modal:true}
-        }
-        else{
-            this.winOptions = this.props.winOptions
-        }
 
+
+        const defaultProp = {width:200,height:100,closed:true,resizable:false,minimizable:false,maximizable:false,
+            collapsible:false,border:'thin',modal:true,
+            onClose : ()=>{$(document).unbind("keydown",this.docKeydownHandler);}
+        };
+
+        this.winOptions = Object.assign({},defaultProp,this.props.winOptions)
         this.state = {message:""}
     }
 
     public render(){
         return (
-            <div ref={el => this.winElm = el} style={{padding:"15px 15px",fontSize:"14px",fontWeight:"bold"}}>
-                {
-                this.state.message 
-                }
-            </div>
+            <React.Fragment>
+                <div ref={el => this.warnWinElm = el} style={{padding:"15px 15px",fontSize:"14px",fontWeight:"bold"}}>
+                    {
+                    this.state.message 
+                    }
+                </div>
+                <div ref={el => this.infoWinElm = el} style={{padding:"15px 15px",fontSize:"14px",fontWeight:"bold"}}>
+                    {
+                    this.state.message 
+                    }
+                </div>
+            </React.Fragment>
+            
         )
     }
 
 
     public componentDidMount(){
+        console.log("componentDidMount")
+        $(this.warnWinElm).window(Object.assign({},this.winOptions,{cls:"c3",title : "警告"}));
+        $(this.infoWinElm).window(Object.assign({},this.winOptions,{cls:"c8",title : "提醒"}));
 
-        $(this.winElm).window(this.winOptions);
 
         // ReactDOM.render(this.props.children as ReactElement<Element>,this.contentDiv);
     }
 
-    public show(message : string){
-        $(this.winElm).window("open");
-        $(this.winElm).window("vcenter");
+
+
+
+    public info(message : string){
 
         this.setState(()=> ({message}));
+        $(this.infoWinElm).window("open");
+        $(this.infoWinElm).window("vcenter");
+
+        this.enterKeyListenner();
         // ReactDOM.unmountComponentAtNode(this.contentDiv);
 
         // ReactDOM.render(this.props.children as ReactElement<Element>,this.contentDiv);
         
     }
 
+    public warn(message : string){
+        this.setState(()=> ({message}));
+        $(this.warnWinElm).window("open");
+        $(this.warnWinElm).window("vcenter");
+        this.enterKeyListenner();
+    }
+
     public close(){
-        $(this.winElm).window("close");
+        $(this.warnWinElm).window("close");
+        $(this.infoWinElm).window("close");
+        
+    }
+
+    private docKeydownHandler=(e)=>{
+        if(e.keyCode === 13){
+            console.log("enter event")
+            e.preventDefault();
+            this.close();
+        }
+    }
+
+    private enterKeyListenner(){
+        $(document).bind("keydown",this.docKeydownHandler)
     }
 
 }

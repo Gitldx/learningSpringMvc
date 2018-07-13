@@ -26,6 +26,7 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
 
 
     private dataSource : AccountModel[] = [];
+    private flatAccList : AccountModel[];
     // private accountEditWindow : Window;
     private ejqAlert : EjqAlert;
     private ejqWindow : EjqWindow;
@@ -212,7 +213,7 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
                 validator :(value, param)=> {
                 // const error=false;;
                 if(value.length>3){
-                        // 4-25验证
+                        
                         ($.fn as any).validatebox.defaults.rules.accountCode.message ="科目长度不合法";
                     return false;
                 }
@@ -245,6 +246,8 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
         const levels = [this.bookInfo.lv1,this.bookInfo.lv2,this.bookInfo.lv3,this.bookInfo.lv4,this.bookInfo.lv5,this.bookInfo.lv6];
         
         const data = accList;
+        this.flatAccList = accList.map((item)=>new AccountModel(item.id,item.accountCode,item.accountName,item.accountType,item.balanceSide,item.journal,item.level));
+        this.flatAccList = this.flatAccList.sort((a,b)=> a.AccountCode < b.AccountCode ? -1 : 1);
 
         data.forEach((item,index)=>{
             item.balanceSide = item.balanceSide ? BalanceSideEnum.Credit : BalanceSideEnum.Debit;
@@ -418,24 +421,17 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
     private saveHandler=()=>{
 
         const m = this.editWindow.model;
-        m.Id = 807;
+        // m.Id = 807;
 
-        switch(m.AccountType){
-            case AccountTypeEnum.Asset :
-                $(this.tabs).tabs("select",0);
-                $(this.assetTreegrid.getTreegirdElm()).treegrid("insert",{
-                    before: 515,
-                    data: m
-                })
-            break;
-        }
+        
 
         if(!this.getLevelOfCode(m.AccountCode)){
-            this.ejqAlert.show("科目长度不合法！");
+            
+            this.ejqAlert.warn("科目长度不合法！");
             return;
         }
 
-        /* 
+        
         const myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/json');
         fetch("/account/add",{
@@ -451,18 +447,58 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
               })
         }).then((response)=>response.json())
         .then((responseJsonData)=>{
-          alert("请求成功");
+            if(responseJsonData.res){
+                
+                this.ejqAlert.info("保存成功");
+                
+                m.Id = responseJsonData.id;
+                switch(m.AccountType){
+                    case AccountTypeEnum.Asset :
+                        $(this.tabs).tabs("select",0);
+                        this.addElementToTreegrid(m);
+                    break;
+                    }
+            }
+            else{
+                
+                this.ejqAlert.warn(responseJsonData.msg);
+            }
+
           
         })
         .catch((error)=>{
-          alert(error);
-        }) */
+            
+            this.ejqAlert.warn(error)
+        })
 
         
     }
 
     private cancelHandler=()=>{
         this.ejqWindow.close();
+    }
+
+
+    private addElementToTreegrid = (m : AccountModel)=>{
+        this.flatAccList.push(m);
+        this.flatAccList = this.flatAccList.sort((a,b)=> a.AccountCode < b.AccountCode ? -1 : 1)
+        const index = this.flatAccList.indexOf(m);
+        const prevModel = this.flatAccList[index-1]
+        const afterId = prevModel.Id;
+        if(m.AccountCode.startsWith(prevModel.AccountCode)){
+            $(this.assetTreegrid.getTreegirdElm()).treegrid("append",{
+                parent : afterId,
+                data: [m]
+            })
+        }
+        else{
+            $(this.assetTreegrid.getTreegirdElm()).treegrid("insert",{
+                after: afterId,
+                data: m
+            })
+        }
+
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.f.ldx.web;
 
+import com.f.ldx.common.KMException;
 import com.f.ldx.domain.KM;
 import com.f.ldx.service.KMService;
 
@@ -12,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
@@ -40,11 +43,28 @@ public class KMController {
 
     @PostMapping("/add")
     @ResponseBody
-    public String add(@RequestBody KM acc) {
-
+    public Map<String,Object> add(@RequestBody KM acc) {
+        Map<String,Object> map = new HashMap<>();
         acc.setBookId(2);
-        this.service.add(acc);
+        try{
+            this.service.add(acc);
+        }
+        catch (KMException ex){
+            map.put("res",false);
+            map.put("msg",ex.getMessage());
+            return map;
+        }
+        catch (RuntimeException ex){
+            map.put("res",false);
+            String msg="系统异常！";
+            if(ex instanceof org.springframework.dao.DuplicateKeyException){msg = "科目代码重复！";}
+//            if(ex.getClass().getName() == "org.springframework.dao.DuplicateKeyException"){msg = "科目代码重复！";}
+            map.put("msg",msg);
+            return map;
+        }
 
-        return acc.getId().toString();
+        map.put("res",true);
+        map.put("id",acc.getId().toString());
+        return map;
     }
 }
