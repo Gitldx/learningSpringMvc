@@ -1,9 +1,10 @@
 package com.f.ldx.service;
 
-import com.f.ldx.common.KMException;
+import com.f.ldx.common.SaveException;
 import com.f.ldx.common.MultipleDataSource;
 import com.f.ldx.domain.Book;
 import com.f.ldx.domain.KM;
+
 import com.f.ldx.domainService.KMDomainService;
 import com.f.ldx.repository.BookMapper;
 import com.f.ldx.repository.KMMapper;
@@ -30,7 +31,7 @@ public class KMService {
     }
 
     @Transactional
-    public int add(KM km) throws KMException {
+    public int add(KM km) throws SaveException {
         MultipleDataSource.setDataSourceKey("sqlServerDataSource");
         Book book = this.bookMapper.getBook(2);
         KMDomainService domainService =  new KMDomainService(book);
@@ -38,7 +39,7 @@ public class KMService {
         boolean isCodelengthValidate = domainService.isCodeLengthValidated(km.getAccountCode());
         if(!isCodelengthValidate){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            throw new KMException("科目长度不合法");
+            throw new SaveException("科目长度不合法");
         }
 
 
@@ -46,7 +47,7 @@ public class KMService {
         KM upperKM = this.mapper.getByCode(upperCode);
         if(km.getAccountCode().length() != book.getLv1() && upperKM == null){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            throw new KMException("科目代码不存在上级科目");
+            throw new SaveException("科目代码不存在上级科目");
         }
         if(upperKM!=null){
             upperKM.setDetailedAccount(false);
@@ -70,6 +71,7 @@ public class KMService {
         MultipleDataSource.setDataSourceKey("sqlServerDataSource");
         this.mapper.update(km);
     }
+
 
 
 

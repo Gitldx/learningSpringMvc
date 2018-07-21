@@ -23,12 +23,11 @@
     -->
 
     <script src="/lib/JExcel/js/jquery.3.2.1.min.js"></script>
-    <script src="/lib/others/numeral.js"></script>
-    <script src="/lib/JExcel/js/excel-formula.js"></script>
+    <script src="/lib/JExcel1_5/numeral.min.js"></script>
+    <script src="/lib/JExcel1_5/excel-formula.min.js"></script>
     
-    <link rel="stylesheet" type="text/css" href="/lib/JExcel/css/jquery.jexcel.css">
-    
-    <script type="text/javascript" src="/lib/JExcel/js/jquery.jexcel.js"></script>
+    <script src="/lib/JExcel1_5/jquery.jexcel.js"></script>
+    <link rel="stylesheet" href="/lib/JExcel1_5/jquery.jexcel.min.css" type="text/css" />
 
     <title>React App</title>
   </head>
@@ -58,6 +57,40 @@
 
 
     <script>
+            function CUSTOM(cell) {
+              return 'alert: ' + cell;
+            }
+
+            function CONSOLE(cell) {
+              console.log(cell);
+              return cell;
+            }
+
+            function CONCAT_COLUMNS(a, b) {
+              return a + ', ' + b;
+            }
+
+            function AVG(v) {
+              var sum = v.reduce(function (a, b) { return a + b; });
+              var avg = sum / v.length;
+
+              return avg;
+            }
+
+            function ACCT_QMYE(code){
+              if(code === 1001){
+                return 1087.12
+              }
+              else
+              {
+                return "null";
+              }
+
+            }
+    </script>
+
+
+    <script>
       
               // data = [
               //     ['Mazda', 2001, 2000],
@@ -75,52 +108,55 @@
         var canCalculate = true;
       
         var data = [
-          ['Furnace',1.05,10000,'=B1*C1'],
-          ['Tower',2,6000,'=B2*C2'],
-          ['Drum',3,5000,'=B3*C3'],
-          ['Pump',4,4000,'=B4*C4'],
-          ['Total','=SUM(B1:B4)','=(C1+C2+C3+C4)','=SUM(D1:D4)']
-      ]
-      
-      
-      var data2 = [
-          ['Furnace',1.05,10000,'=B1*C1+33.3'],
-          ['Tower',2,6000,'=B2*C2'],
-          ['Drum',3,5000,'=B3*C3'],
-          ['Pump',4,4000,'=B4*C4'],
-          ['Total','=SUM(B1:B4)','=(C1+C2+C3+C4)','=SUM(D1:D4)']
-      ]
-      
-      $('#my-spreadsheet').jexcel({
-          data:data,
-          columns: [
-              { type:'text' },
-              { type:'numeric' },
-              { type:'numeric' },
-              { type:'numeric' },
-          ],
-          colHeaders: ['Equipment','Quantity', 'Price', 'Total'],
-          colWidths: [ 400, 100, 200 ],
-          colWidths: [300, 150, 150, 150, 150],
-      });
-      
-      $('#my-spreadsheet').jexcel('updateSettings', {
-          cells: function (cell, col, row) {
-              if (col > 0) {
-                  value = $('#my-spreadsheet').jexcel('getValue', $(cell));
-                  var val;
-                  if(canCalculate){//ldx
-                      val = numeral($(cell).text()).format('0,0.00');
-                  }
-                  else{
-                      val = $(cell).text();
-                  }
-                  
-                  $(cell).html('<input type="hidden" value="' + value + '">' + val);
-              }
-          }
-      });
-      
+    ['Furnace',1,10000,'=B1*C1','=IF(C1 > 5000, true, false)','=CUSTOM(A1)','=ACCT_QMYE(1001)'],
+    ['Tower',2,6000,'=B2*C2','=IF(C2 > 5000, true, false)','=CUSTOM(199)','=ACCT_QMYE(A1)'],
+    ['Drum',3,5000,'=B3*C3','=IF(C3 > 5000, true, false)','=CUSTOM(A1)','=ACCT_QMYE(1001)'],
+    ['Pump',4,4000,'=B4*C4','=IF(C4 > 5000, true, false)','=CUSTOM(A1)','=ACCT_QMYE(A1)'],
+    ['Total','=SUM(B1:B4)','=(C1+C2+C3+C4)','=SUM(D1:D4)','','=CUSTOM(A1)','=ACCT_QMYE(A1)']
+]
+
+$('#mys').jexcel({
+    data:data,
+    columns: [
+        { type:'text' },
+        { type:'numeric' },
+        { type:'numeric' },
+        { type:'numeric' },
+    ],
+    colHeaders: ['Equipment','Quantity', 'Price', 'Total', '>5000?'],
+    colWidths: [ 200, 80, 100, 100, 100 ,200,200]
+});
+
+$('#mys').jexcel('updateSettings', {
+    table: function (instance, cell, col, row, val, id) {
+        // Format numbers
+        if (col == 2 || col == 3) {
+            // Get text
+            txt = $(cell).text();
+            // Format text
+            txt = numeral(txt).format('0,0.00');
+            // Update cell value
+            $(cell).html('<input type="hidden" value="' + val + '"> $ ' + txt);
+        }
+
+        // Bold the total row
+        if ($(cell).text() == 'Total') {
+            $('.r' + row).css('font-weight', 'bold');
+            $('.r' + row).css('background-color', '#fffaa3');
+        }
+
+        if(val.substr(0,1) == '='){
+          $('#mys').jexcel('executeFormula', col + '-' + row);
+        }
+        
+    }
+});
+
+// $('#mys').jexcel('executeFormula', 6 + '-' + 0);
+
+
+
+
       
       // $('#mys').jexcel({
       //     data:data2,
@@ -143,7 +179,7 @@
               canCalculate = !canCalculate;
 
 
-              $('#my-spreadsheet').jexcel({
+              $('#mys').jexcel({
                   data:data,
                   columns: [
                       { type:'text' },
@@ -151,28 +187,57 @@
                       { type:'numeric' },
                       { type:'numeric' },
                   ],
-                  colHeaders: ['Equipment','Quantity', 'Price', 'Total'],
-                  colWidths: [ 400, 100, 200 ],
-                  colWidths: [300, 150, 150, 150, 150],
+                  colHeaders: ['Equipment','Quantity', 'Price', 'Total', '>5000?'],
+                  colWidths: [ 200, 80, 100, 100, 100 ]
               });
 
-              $('#my-spreadsheet').jexcel('updateSettings', {
-              cells: function (cell, col, row) {
-                  if (col > 0) {
-                      value = $('#my-spreadsheet').jexcel('getValue', $(cell));
-                      var val;
+              $('#mys').jexcel('updateSettings', {
+                table: function (instance, cell, col, row, val, id) {
+                  // if (col > 0) {
+                  //     value = $('#mys').jexcel('getValue', $(cell));
+                  //     var val;
+                  //     if(canCalculate){//ldx
+                  //         val = numeral($(cell).text()).format('0,0.00');
+                  //     }
+                  //     else{
+                  //         val = $(cell).text();
+                  //     }
+                      
+                  //     $(cell).html('<input type="hidden" value="' + value + '">' + val);
+                  // }
+
+
+                  // Format numbers
+                  if (col == 2 || col == 3 || col== 4) {
+                      // Get text
+                      txt = $(cell).text();
+                      // Format text
                       if(canCalculate){//ldx
-                          val = numeral($(cell).text()).format('0,0.00');
+                        txt = numeral(txt).format('0,0.00');
                       }
                       else{
-                          val = $(cell).text();
+                        txt = val;
                       }
-                      
-                      $(cell).html('<input type="hidden" value="' + value + '">' + val);
+
+                      // Update cell value
+                      $(cell).html('<input type="hidden" value="' + val + '">' + txt);
                   }
+
+                  // Bold the total row
+                  if ($(cell).text() == 'Total') {
+                      $('.r' + row).css('font-weight', 'bold');
+                      $('.r' + row).css('background-color', '#fffaa3');
+                  }
+
+
               }
               });
           }
+
+
+
+
+           
       
           </script>
 

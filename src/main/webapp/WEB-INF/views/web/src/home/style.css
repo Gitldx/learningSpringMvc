@@ -26,3 +26,8 @@
     text-align: center;
     line-height: normal;
 }
+
+.ant-layout-header{
+    height: 45px;
+    line-height: 45px;
+}

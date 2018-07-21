@@ -27,6 +27,8 @@ const KmColumnField = "Account";
 
 export declare interface IAccount {AccountId:number,AccountCode:string,AccountName:string,IsDetail:boolean}
 
+export declare interface IVFooter {Summary:any,DebitAmount:number,CreditAmount:number,IsFooter:boolean}
+
 // declare interface IProps {}
 // declare interface IStates{accList :boolean,accEdit:boolean}
 
@@ -50,17 +52,18 @@ export default class Pzgrid extends React.Component<{},{}>{
 
 
     
-    private dataSource : {rows:VoucherEntryModel[],footer:Array<{Summary:any,DebitAmount:number,CreditAmount:number,IsFooter:boolean}>} = 
-    {rows:[
-        new VoucherEntryModel(1,"摘要1发发发发发发付付多付打guygug方式打开借方圣诞节是否防辐射ryfvihi就顾冲锋衣太晚所所所所",101,1,undefined,true),
-        new VoucherEntryModel(2,"摘要2",101,undefined,12.57,true),
-        new VoucherEntryModel(3,"摘要1",101,1,undefined,true),
-        new VoucherEntryModel(4,"摘要2",101,undefined,12.57,true),
-        new VoucherEntryModel(5,"摘要1",101,1,undefined,true),
+    private dataSource : {rows:VoucherEntryModel[],footer:IVFooter[]} 
+    // = 
+    // {rows:[
+    //     new VoucherEntryModel(1,"摘要1发发发发发发付付多付打guygug方式打开借方圣诞节是否防辐射ryfvihi就顾冲锋衣太晚所所所所",101,undefined,undefined,true),
+    //     new VoucherEntryModel(2,"摘要2",101,undefined,undefined,true),
+    //     new VoucherEntryModel(3,"摘要1",101,undefined,undefined,true),
+    //     new VoucherEntryModel(4,"摘要2",101,undefined,undefined,true),
+    //     new VoucherEntryModel(5,"摘要1",101,undefined,undefined,true),
         
-    ],
-    footer:[{Summary:"XX",DebitAmount:2,CreditAmount:15,IsFooter:true}]
-    }
+    // ],
+    // footer:[{Summary:"XX",DebitAmount:undefined,CreditAmount:undefined,IsFooter:true}]
+    // }
 
 
     private accountsDataSource : IAccount[] =[
@@ -131,6 +134,7 @@ export default class Pzgrid extends React.Component<{},{}>{
             required: false,
             selectOnNavigation: false,
             panelWidth: 300,
+            // panelHeight:288,
             height:this.cellHeight,
             columns: [[
                 { field: 'AccountCode', title: '代码', width: 120,resizable:false },
@@ -301,7 +305,7 @@ export default class Pzgrid extends React.Component<{},{}>{
 
 
     public InsertVoucherEntry(){
-        const m : VoucherEntryModel = new VoucherEntryModel(0,"",undefined,undefined,undefined,false);
+        const m : VoucherEntryModel = new VoucherEntryModel(0,"",undefined,undefined,undefined,undefined,undefined,false);
         $(this.tableElm).datagrid('insertRow',{
             index: this.selectedIndex,	
             row: m
@@ -326,8 +330,10 @@ export default class Pzgrid extends React.Component<{},{}>{
 
 
 
-    public renderTableElm(){
+    public renderTableElm(v:{rows:VoucherEntryModel[],footer:IVFooter[]}){
         
+        this.dataSource = v;
+        this.datagridProperty.data = this.dataSource;
         
         $(this.tableElm).datagrid({
             ...this.datagridProperty,
@@ -431,6 +437,17 @@ export default class Pzgrid extends React.Component<{},{}>{
         });
     }
 
+
+    public endEdit(){
+        const $dg = $(this.tableElm);
+        const cell = $dg.datagrid("cell");
+        if(cell){
+            $dg.datagrid('endEdit', cell.index);
+            $dg.trigger("onEndEdit",[cell.index,cell.field]);
+        }
+
+    }
+
     private closeedHandler=()=>{
         this.hasPopupAccountList = false;
     }
@@ -495,7 +512,7 @@ export default class Pzgrid extends React.Component<{},{}>{
         if(!window.IsDropDownOpen){return;}
         console.log("newValue:"+newValue);
         console.log("oldValue:"+oldValue);
-        const currentcell = $(this.tableElm).datagrid("cell")
+        const currentcell = $(this.tableElm).datagrid("cell");
         if(!currentcell){return;}
         const selected:number = currentcell.index;
         console.log(`currentRow:${selected}`);
@@ -528,13 +545,11 @@ export default class Pzgrid extends React.Component<{},{}>{
 
         if($(div).find("a[class*=btn]").length >0){return;}
 
-        const $a = $("<div style='height:30px;text-align:left;margin-top: 1px; border-bottom: 0.5px solid lightgray' ><a class='c4' href='javascript:void(0)'>新增科目</a><div>");
+        const $a = $("<div style='height:24px;text-align:left;margin-top: 1px; border-bottom: 0px solid lightgray' ><a class='c4' href='javascript:void(0)'>新增科目</a><div>");
         $a.children("a").linkbutton({
             iconCls:'icon-add',
+            height:22,
             onClick:()=>{
-                // if(!thiscontext.state.accEdit){
-                //     thiscontext.setState({accEdit:true});
-                // }
                 $(edt).combogrid("hidePanel");
                 thiscontext.ejqWindow.show();
             }
@@ -545,7 +560,7 @@ export default class Pzgrid extends React.Component<{},{}>{
 
 
     private AppendVoucherEntry(){
-        const m : VoucherEntryModel = new VoucherEntryModel(0,"",undefined,undefined,undefined,false);
+        const m : VoucherEntryModel = new VoucherEntryModel(0,"",undefined,undefined,undefined,undefined,undefined,false);
 
         $(this.tableElm).datagrid('appendRow',{
             index: this.dataSource.rows.length,	

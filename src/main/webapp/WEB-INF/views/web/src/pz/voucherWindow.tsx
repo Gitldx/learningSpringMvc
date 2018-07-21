@@ -2,8 +2,10 @@
 import * as React from "react";
 
 import Pzgrid from "./pzgrid"
+import VoucherEntryModel from "./VoucherEntryModel"
 import{VoucherHeader} from "./voucherHeader"
 import VoucherModel from './VoucherModel'
+
 
 
 declare let window:any;
@@ -68,16 +70,46 @@ export class VoucherWindow extends React.Component<{},IState>{
 
 
     
-    public showWindow():void{
-        this.setState({showdg:true},()=>{
-            $('#vwin').window('open');
+    public showWindow(id? : number):void{
 
-            $("#vwin").window("expand");
-            this.pzDatagrid.renderTableElm();
-            this.voucherHeader.InitValue();
-            this.voucherHeader.bindVoucherdg(this.pzDatagrid);
+        if(id){
+            $.ajax({ 
+                type : "get", 
+                url : "/pz/getVoucher/" + id.toString(), 
+                async : false, 
+                success : (response)=>{ 
+                    console.log(response);
+                    
+                    const data = {rows:
+                        response.entries.map((item)=>
+                            new VoucherEntryModel(item.id,item.summary,item.accountId,item.accountCode,item.accountName,!item.balanceSide ? item.amount : undefined,item.balanceSide ? item.amount : undefined,true)
+                        )
+                        ,footer:[{Summary:"XX",DebitAmount:undefined,CreditAmount:undefined,IsFooter:true}]};
+                        this.open(data);
+                },
+                error :(err)=>{
+                    alert(err);
+                }
+            }); 
+        }
+        else{
 
-        });
+            const data =  {rows:[
+                new VoucherEntryModel(1,"摘要1发发发发发发付付多付打guygug方式打开借方圣诞节是否防辐射ryfvihi就顾冲锋衣太晚所所所所",101,undefined,undefined,undefined,undefined,true),
+                new VoucherEntryModel(2,"摘要2",101,undefined,undefined,undefined,undefined,true),
+                new VoucherEntryModel(3,"摘要1",101,undefined,undefined,undefined,undefined,true),
+                new VoucherEntryModel(4,"摘要2",101,undefined,undefined,undefined,undefined,true),
+                new VoucherEntryModel(5,"摘要1",101,undefined,undefined,undefined,undefined,true),
+                
+            ],
+            footer:[{Summary:"XX",DebitAmount:undefined,CreditAmount:undefined,IsFooter:true}]
+            };
+            this.open(data);
+
+        }
+
+
+        
         
     }
 
@@ -85,6 +117,19 @@ export class VoucherWindow extends React.Component<{},IState>{
 
     public closeWindow(){
         $('#vwin').window('close');
+    }
+
+
+    private open(data){
+        this.setState({showdg:true},()=>{
+            $('#vwin').window('open');
+
+            $("#vwin").window("expand");
+            this.pzDatagrid.renderTableElm(data);
+            this.voucherHeader.InitValue();
+            this.voucherHeader.bindVoucherdg(this.pzDatagrid);
+
+        });
     }
 
 
@@ -106,17 +151,18 @@ export class VoucherWindow extends React.Component<{},IState>{
     
             const isInXY = mouseX > leftX && mouseY > leftY && mouseX < rightX && mouseY < rightY;
             // console.log(`leftx:${leftX},lefty:${leftY},rightx:${rightX},righty:${rightY},mousex:${mouseX},mouseY:${mouseY},isInXY:${isInXY}`)
-            const $dg = $(this.pzDatagrid.tableElm);
+            // const $dg = $(this.pzDatagrid.tableElm);
     
             // const cell = $dg.datagrid("cell");
             
     
-            if (!isInXY && $dg.datagrid("cell")) {
+            if (!isInXY) {
                 // console.log("!IsInXY")
-                const cell = $dg.datagrid("cell");
-                $dg.datagrid('endEdit', cell.index);
+                // const cell = $dg.datagrid("cell");
+                // $dg.datagrid('endEdit', cell.index);
 
-                $dg.trigger("onEndEdit",[cell.index,cell.field]);
+                // $dg.trigger("onEndEdit",[cell.index,cell.field]);
+                this.pzDatagrid.endEdit();
             }
     }
 }

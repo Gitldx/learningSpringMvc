@@ -1,10 +1,12 @@
 /// <reference path="../jqplugins/plugin.d.ts" />
 
 import * as React from "react";
+import EjqAlert from '../common/component/ejqAlert'
 import Pzgird from "./pzgrid"
 
 import {HttpSend} from '../common/util/httpHelper'
 import VoucherModel from './VoucherModel'
+
 
 
 
@@ -19,6 +21,7 @@ export class VoucherHeader extends React.Component<IProps,{}>{
     private voucherDg : Pzgird;
 
     // private addEntryBtnElm:HTMLElement;
+    private ejqAlert : EjqAlert;
     private saveBtnElm : HTMLElement;
     private insertEntryBtnElm:HTMLElement;
     private deleteEntryBtnElm:HTMLElement;
@@ -31,6 +34,8 @@ export class VoucherHeader extends React.Component<IProps,{}>{
     private attachNumInputElm : HTMLElement;
     private voucherhNumInputElm : HTMLElement;
     private hasLoaded:boolean=false;
+
+ 
 
     private voucherTypeDS : IVoucherType[] = [
         {Id:1,Word:"*"},
@@ -100,15 +105,13 @@ export class VoucherHeader extends React.Component<IProps,{}>{
                 </div>
 
             </div>
+            <EjqAlert ref = {el => this.ejqAlert = el}/>
         </div>
         )
     }
 
 
 
-    public componentWillUnmount(){
-        console.log("voucherMng unmount!");
-    }
 
     public componentDidMount(){
         ($ as any).parser.parse('div#voucherToolBar');
@@ -141,22 +144,24 @@ export class VoucherHeader extends React.Component<IProps,{}>{
 
 
         $(this.deleteEntryBtnElm).linkbutton({
-            onClick(){
+            onClick:()=>{
                 console.log("deleteEntryBtnElm click");
+                console.log(this.voucherDg.Entries.rows.filter((item)=> item.HasAmount))
             }
         });
 
         $(this.yearInputElm).numberspinner({
             onChange:(newValue:number,oldValue:number)=>{
                 console.log(newValue);
+                this.props.Vouhcer.Year = newValue;
                 // this.setState({VoucherYear:newValue});
             }
         });
 
         $(this.periodInputElm).numberspinner({
             onChange:(newValue:number,oldValue:number)=>{
+                this.props.Vouhcer.Period = newValue;
                 console.log(newValue);
-                
             }
         });
         $(this.dateInputElm).datebox({
@@ -196,6 +201,7 @@ export class VoucherHeader extends React.Component<IProps,{}>{
 
         $(this.voucherhNumInputElm).numberspinner({
             onChange : (newValue:number,oldValue:number)=>{
+                this.props.Vouhcer.VoucherNum = newValue;
                 console.log(newValue);
             }
         });
@@ -232,8 +238,16 @@ export class VoucherHeader extends React.Component<IProps,{}>{
     //     this.setState({VoucherYear:event.target.value});
     // }
 
+
+
     private saveHandler(){
+
+        this.voucherDg.endEdit();
+
+        
+        $(this.saveBtnElm).blur(); // 强制失焦，否则弹窗监听不到回车事件
         const v = this.props.Vouhcer;
+
         const body = {
             voucher:{
                 year:v.Year,
@@ -242,25 +256,35 @@ export class VoucherHeader extends React.Component<IProps,{}>{
                 voucherType : v.VoucherType,
                 voucherNum : v.VoucherNum
             },
-            entries:this.voucherDg.Entries.rows.map((value,rowIndex)=>(
+            entries:this.voucherDg.Entries.rows.filter((item)=> item.HasAmount).map((value,rowIndex)=>(
                 {
                     // id:value.EntryId,
                     id:null,
                     voucherId : 0,
                     accountId : value.Account,
                     summary : value.Summary,
-                    amount : !value.DebitAmount ? value.CreditAmount.toString() : value.DebitAmount.toString(),
-                    balanceSide : !value.DebitAmount ? true : false,
+                    // amount : !value.DebitAmount ? value.CreditAmount.toString() : value.DebitAmount.toString(),
+                    // balanceSide : !value.DebitAmount ? true : false,
+                    amount : value.Amount.amount,
+                    balanceSide :value.Amount.balanceSide,
                     rowNum : rowIndex
                 }
             )) 
-          };
+        };
+
         HttpSend.post("/pz/add",body,
             (responseJsonData)=>{
-            alert("请求成功");
-            console.log(responseJsonData);
+
+                if(responseJsonData.res){
+                    this.ejqAlert.info("保存成功")
+                }
+                else{
+                    this.ejqAlert.warn(responseJsonData.msg)
+                }
+
         },(error)=>{
-            alert(error);}
+            this.ejqAlert.warn(error)
+        }
         )
 
         // const myHeaders = new Headers();

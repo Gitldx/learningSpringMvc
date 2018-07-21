@@ -15,8 +15,30 @@
         <result column="modifyMan" property="modifyMan"/>
     </resultMap>
 
+    <resultMap type="VoucherEntry" id="VoucherEntry">
+        <id column="id" property="id"/>
+        <result column="voucherId" property="voucherId"/>
+        <result column="accountId" property="accountId"/>
+        <result column="summary" property="summary"/>
+        <result column="amount" property="amount"/>
+        <result column="balanceSide" property="balanceSide"/>
+        <result column="rowNum" property="rowNum"/>
+    </resultMap>
+
+
+
     <select id="getVoucher" parameterType="int" resultMap="voucher">
         select * from Voucher where id = #{id}
+    </select>
+
+    <select id="getVoucherByYM" parameterType="hashmap" resultType="java.util.HashMap">
+        select id, voucherDate AS [date],[year],period,VoucherTypeId AS voucherType,VoucherNum AS voucherNo,CreatorUserId AS [create],LastModifierUserId AS [modify],
+        AuditMan AS audit from Voucher where Year = #{year} and Period = #{period} and  BookId = #{bookId}
+    </select>
+
+    <select id="getVoucherEntries" parameterType="int" resultType="VoucherEntry">
+        select V.*,Acc.AccountCode,Acc.AccountName from VoucherEntries V INNER JOIN Account Acc ON V.AccountId = Acc.id where V.VoucherId = #{voucherId}
+        <!--select * from VoucherEntries where VoucherId = #{voucherId}-->
     </select>
 
     <insert id="insertVoucher" useGeneratedKeys="true"
@@ -40,5 +62,7 @@
         insert into VoucherEntries(VoucherId ,AccountId ,Summary ,Amount ,BalanceSide ,RowNum) values
         (#{voucherId}, #{accountId}, #{summary}, #{amount},#{balanceSide},#{rowNum})
     </insert>
+
+    
 
 </mapper>

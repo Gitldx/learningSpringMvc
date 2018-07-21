@@ -73,8 +73,8 @@ export default class QueryPZ extends React.Component<ICallback,{inputNumber : st
 
 
     public qparams(){
-        console.log(this.beginM.props.defaultValue.year() + "-" + this.beginM.props.defaultValue.month()+1);
-        const [beginP,endP,num] = [this.selectBeginMonth || this.beginM.props.defaultValue.year() + "-" + this.beginM.props.defaultValue.month()+1 ,this.selectEndMonth,this.state.inputNumber]
+        console.log(this.beginM.props.defaultValue.year() + "-" + (this.beginM.props.defaultValue.month()+1));
+        const [beginP,endP,num] = [this.selectBeginMonth || this.beginM.props.defaultValue.year() + "-" + (this.beginM.props.defaultValue.month()+1) ,this.selectEndMonth,this.state.inputNumber]
         return {
             beginP,endP,num
         }

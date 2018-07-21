@@ -14,7 +14,7 @@
     <script type="text/javascript" src="/js/lib/EasyUi/jquery.min.js"></script>
     <script type="text/javascript" src="/js/lib/EasyUi/jquery.easyui.min.js"></script>
 
-    <link href="/styles/static/css/home.a8a4add9.css" rel="stylesheet"></head>
+    <link href="/styles/static/css/home.27ba9b6b.css" rel="stylesheet"></head>
 </head>
 <body>
 

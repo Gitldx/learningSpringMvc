@@ -1,13 +1,15 @@
+
 export default class VoucherEntryModel{
 
-    public AccountCode:string;
-    public AccountName:string;
+    
 
 
     constructor(
         public EntryId:number,
         public Summary:string,
         public Account:number,
+        public AccountCode:string,
+        public AccountName:string,
         private debitAmount : number,
         private creditAmount : number,
         public IsDetailAccount : boolean,
@@ -24,7 +26,8 @@ export default class VoucherEntryModel{
     }
 
     set DebitAmount(amount:number){
-        this.debitAmount = amount;
+        this.debitAmount =Number(Number(amount).toFixed(2));
+
         if(amount!==undefined && amount.toString().length !== 0){
             this.creditAmount = undefined;
         }
@@ -36,10 +39,20 @@ export default class VoucherEntryModel{
     }
 
     set CreditAmount(amount:number){
-        this.creditAmount = amount;
+        this.creditAmount = Number(Number(amount).toFixed(2));
         if(amount!==undefined && amount.toString().length !== 0){
         this.debitAmount = undefined;
         }
     }
 
+    get HasAmount(){
+        return $.isNumeric(this.debitAmount) || $.isNumeric(this.creditAmount);
+    }
+
+    get Amount():{amount : number,balanceSide : boolean}{
+        return {
+            amount : !this.debitAmount ? this.creditAmount : this.debitAmount,
+            balanceSide : !this.debitAmount ? true : false
+        }
+    }
 }

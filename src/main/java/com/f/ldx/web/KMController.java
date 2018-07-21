@@ -1,6 +1,6 @@
 package com.f.ldx.web;
 
-import com.f.ldx.common.KMException;
+import com.f.ldx.common.SaveException;
 import com.f.ldx.domain.KM;
 import com.f.ldx.service.KMService;
 
@@ -49,7 +49,7 @@ public class KMController {
         try{
             this.service.add(acc);
         }
-        catch (KMException ex){
+        catch (SaveException ex){
             map.put("res",false);
             map.put("msg",ex.getMessage());
             return map;

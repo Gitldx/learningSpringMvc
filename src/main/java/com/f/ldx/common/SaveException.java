@@ -1,8 +1,8 @@
 package com.f.ldx.common;
 
-public class KMException extends Exception {
+public class SaveException extends Exception {
     private String msg;
-    public KMException(String msg){
+    public SaveException(String msg){
         super(msg);
         this.msg = msg;
     }

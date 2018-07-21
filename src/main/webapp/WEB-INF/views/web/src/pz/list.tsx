@@ -9,7 +9,7 @@ import {VoucherWindow} from './voucherWindow'
 export default class List extends React.Component{
 
     private rctInput : React.Component;
-    private vw : VoucherWindow
+    private vw : VoucherWindow;
     private columns = [
         {field : "date",title :"日期",width:100},
         {field : "year",title :"年度",width:100},
@@ -22,26 +22,41 @@ export default class List extends React.Component{
     ];
 
     private datasource = [
-        {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"123",create :"zz",modify : "fdf",audit : "fsd"},
-        {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"125",create :"zz",modify : "fdf",audit : "fsd"},
-        {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"129",create :"zz",modify : "fdf",audit : "fsd"},
+        // {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"123",create :"zz",modify : "fdf",audit : "fsd"},
+        // {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"125",create :"zz",modify : "fdf",audit : "fsd"},
+        // {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"129",create :"zz",modify : "fdf",audit : "fsd"},
     ];
 
     constructor(props:{}){
         super(props);
-        console.time()
-        for(let i = 1;i<50;i++){
-            this.datasource.push(
-                {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:i.toString(),create :"zz",modify : "fdf",audit : "fsd"}
-            )
-        }
 
-        console.timeEnd();
+        // for(let i = 1;i<50;i++){
+        //     this.datasource.push(
+        //         {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:i.toString(),create :"zz",modify : "fdf",audit : "fsd"}
+        //     )
+        // }
+
+        $.ajax({ 
+            type : "get", 
+            url : "/pz/getVoucher", 
+            async : false, 
+            success : (data)=>{ 
+                // console.log("getVoucher");
+                // console.log(data);
+                data.forEach(element => {
+                    this.datasource.push(element);
+                });
+            },
+            error :(err)=>{
+                alert(err);
+            }
+        }); 
 
         this.setEuiControl();
 
         (window as any).addAction = this.add;
         (window as any).queryAction = this.queryAction;
+
     }
 
 
@@ -49,6 +64,7 @@ export default class List extends React.Component{
         return (
             <React.Fragment>
                 {/* <button onClick={this.test}>test</button> */}
+                
                 <EqjDatagrid columns = {this.columns} datasource = {this.datasource} onDblClickRow = {this.datagridDbClick}/>
                 <VoucherWindow ref={el=>this.vw = el}/>
             </React.Fragment>
@@ -58,8 +74,9 @@ export default class List extends React.Component{
 
     private datagridDbClick=(index:number,row:any)=>{
         this.vw.closeWindow();
+        const id : number = row.id;
         setTimeout(() => {
-            this.vw.showWindow();
+            this.vw.showWindow(id);
         }, 0);
     }
 
