@@ -26,7 +26,12 @@ export default class EjqDatagrid extends React.Component<Iprops>{
     }
 
     public componentDidMount(){
+
         this.renderTableElm();
+    }
+
+    get TableElm(){
+        return this.tableElm;
     }
 
 

@@ -153,8 +153,8 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
       'controller': true,  
       'focusColor': '#1abc9c',
       'iconSize': '100px',
-      'left': '50',
-      'top': '-10',
+      'left': $(this.popupCtrl).prev("button").width() * 2,
+      'top': $(this.popupCtrl).prev("button").height() * -1/2,
       'width': '400px',
     };
     let tempdisplay :string;
@@ -271,7 +271,8 @@ private queryPopupControl(){
         return <QueryPZ ref={el=>this.queryComponent = el} queryCallBack = {this.query} cancelCallBack = {this.queryCancel}/>;
       case Mkn.dopz :
         return <QueryPZ ref={el=>this.queryComponent = el} queryCallBack = {this.query} cancelCallBack = {this.queryCancel}/>;
-      
+      case Mkn.mxz :
+        return <QueryMxz ref={el=>this.queryComponent = el} queryCallBack = {this.query} cancelCallBack = {this.queryCancel}/>;
     }
     return null;
   }

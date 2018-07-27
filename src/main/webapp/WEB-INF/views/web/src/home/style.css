@@ -31,3 +31,7 @@
     height: 45px;
     line-height: 45px;
 }
+
+.accComboFullWidth{
+    width: -webkit-fill-available !important;
+}

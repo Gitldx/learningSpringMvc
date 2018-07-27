@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface KMMapper {
 
@@ -18,8 +19,11 @@ public interface KMMapper {
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="Id")
     void addKM(KM km);
 
-    @Select("select Id,AccountCode,AccountName,AccountType,BalanceSide,IsJournal,IsDetailedAccount from Account where AccountCode like #{code}%")
+    @Select("select Id,AccountCode,AccountName,AccountType,BalanceSide,IsJournal,IsDetailedAccount from Account where AccountCode like CONCAT(#{code},'%')")
     ArrayList<KM> findByCode(String code);
+
+    @Select("SELECT id,code,name FROM company WHERE code like CONCAT('%',#{code},'%')")
+    ArrayList<HashMap<String,Object>> findByCompanyCode(String code);
 
 
     @Select("select Id,AccountCode,AccountName,AccountType,BalanceSide,IsJournal,IsDetailedAccount,Level from Account where AccountCode = #{code}")

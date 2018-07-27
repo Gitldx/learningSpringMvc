@@ -52,7 +52,7 @@ export default class QueryPZ extends React.Component<ICallback,{inputNumber : st
                 </div>
                 
                 <div style = {lineItemStyle} className="querypopupLineItem">
-                 <Input  placeholder="输入凭证号，或凭证号范围，例如1,4,6,1-10" value={this.state.inputNumber} onChange={this.inputNumChanged}/>
+                 <Input size="small" placeholder="输入凭证号，或凭证号范围，例如1,4,6,1-10" value={this.state.inputNumber} onChange={this.inputNumChanged}/>
                  </div>
                 
                 <Row gutter={16} className="queryControlBtnGrp">

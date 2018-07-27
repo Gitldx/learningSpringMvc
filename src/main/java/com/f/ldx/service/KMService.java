@@ -15,6 +15,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 @Service
@@ -28,6 +29,14 @@ public class KMService {
     public ArrayList<KM> getList(){
         MultipleDataSource.setDataSourceKey("sqlServerDataSource");
         return this.mapper.getKMList();
+    }
+
+    public ArrayList<KM> findByCode(String code){
+        return  this.mapper.findByCode(code);
+    }
+
+    public ArrayList<HashMap<String,Object>> findByCompanyCode(String code){
+        return this.mapper.findByCompanyCode(code);
     }
 
     @Transactional

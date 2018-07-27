@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +15,7 @@
     <script type="text/javascript" src="/js/lib/EasyUi/jquery.min.js"></script>
     <script type="text/javascript" src="/js/lib/EasyUi/jquery.easyui.min.js"></script>
 
-    <link href="/styles/static/css/home.27ba9b6b.css" rel="stylesheet"></head>
+    <link href="/styles/static/css/home.50209b3e.css" rel="stylesheet"></head>
 </head>
 <body>
 
@@ -29,6 +30,19 @@
           You need to enable JavaScript to run this app.
         </noscript>
     <div id="root"></div>
+
+    <script type="text/javascript">
+     $.fn.combogrid.defaults.onLoadSuccess = function(items){
+         if (items.rows){
+             var dg = $(this); // .combogrid('grid');
+             var opts = dg.datagrid('options');
+             if(!!opts.autoSelectFirst){
+                $(this).datagrid('selectAll',0);// items.rows[0][opts.valueField]);
+             }
+         }
+     }
+     </script>
+
     <script type="text/javascript" src="/js/static/js/home.bundle.js"></script>
 </body>
 </html>
