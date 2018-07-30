@@ -30,7 +30,7 @@ export default class List extends React.Component{
     constructor(props:{}){
         super(props);
 
-        // for(let i = 1;i<50;i++){
+        // for(let i = 1;i<5000;i++){
         //     this.datasource.push(
         //         {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:i.toString(),create :"zz",modify : "fdf",audit : "fsd"}
         //     )

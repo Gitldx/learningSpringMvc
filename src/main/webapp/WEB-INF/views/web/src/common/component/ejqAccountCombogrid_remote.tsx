@@ -25,6 +25,7 @@ export default class EjqAccountCombogrid extends React.Component<IProps>{
     private accList: AccList;
     private hasPopupAccountList: boolean = false;
 
+
     constructor(props: IProps) {
         super(props);
 
@@ -52,11 +53,11 @@ export default class EjqAccountCombogrid extends React.Component<IProps>{
 
         return (
             <div style={{ display: "inline-block", ...this.props.style }} ref={el => this.wrapper = el}>
-                <span style={{ display: 'flex', alignItems: 'center' }}>
+                <span style={{ display: 'flex', alignItems: 'center',position:"relative" }}>
                     <select ref={el => this.comboElm = el} style={{
                         width: "-webkit-fill-available"
                     }} />
-                    <span ref={el => this.btn = el} style={{ display: 'none' }}>
+                    <span ref={el => this.btn = el} style={{ position : "absolute",display:"none"}}>
                         <Button size="small" onClick={this.test}>...</Button>
                     </span>
 
@@ -70,6 +71,7 @@ export default class EjqAccountCombogrid extends React.Component<IProps>{
 
     public componentDidMount() {
         $(this.comboElm).combogrid({
+            comboElm : this.comboElm,
             autoSelectFirst : true,
             panelWidth: 300,
             prompt: this.props.prompt,
@@ -92,10 +94,19 @@ export default class EjqAccountCombogrid extends React.Component<IProps>{
         $(this.wrapper).hover(() => {
             $(this.btn).toggle();
         })
+
+        const btnMarginRight = $(this.btn).prev("span.combo").find("span.textbox-addon-right:first-child").width();
+        $(this.btn).css("right" , (btnMarginRight + 4) + "px");
     }
 
     public componentDidUpdate() {
         $(this.comboElm).next("span.combo").addClass("accComboFullWidth");
+        
+        setTimeout(() => {
+            const width = $(this.btn).prev("span.combo").find("span.textbox-addon-right:first-child").width();
+            $(this.btn).css("right" , (width + 4) + "px");
+        }, 200);
+        
     }
 
     get SelectId() {

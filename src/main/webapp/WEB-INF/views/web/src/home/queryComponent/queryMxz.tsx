@@ -65,11 +65,15 @@ export default class QueryMxz extends React.Component<ICallback> implements IQue
     }
 
     public qparams(){
+        const b = this.beginM.SelectedMonth.split("-");
+        const e = this.endM.SelectedMonth.split("-");
         return {
-            beginM : this.beginM.SelectedMonth,
-            endM : this.endM.SelectedMonth,
+            beginY : b[0],
+            beginM : b[1],
+            endY : e[0],
+            endM : e[1],
             beginCode : this.beginAcc.SelectCode,
-            // endCode : this.endAcc.SelectCode
+            endCode : this.endAcc.SelectCode
         }
     }
 

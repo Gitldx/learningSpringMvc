@@ -56,21 +56,22 @@ export class VoucherHeader extends React.Component<IProps,{}>{
         return (
         <div id="voucherToolBar">
             <div style={{height:"25px",margin:"10px 0"}}>
-
-                <a  title="第一条" href="javascript:void(0)" data-options="iconCls:'icon-first-item'" className="easyui-linkbutton"/>
-                <a title="上一条" href="javascript:void(0)" data-options="iconCls:'icon-prev-item'" className="easyui-linkbutton"/>
-                <a title="下一条" href="javascript:void(0)" data-options="iconCls:'icon-next-item'" className="easyui-linkbutton"/>
-                <a title="最后一条" href="javascript:void(0)" data-options="iconCls:'icon-last-item'" className="easyui-linkbutton"/>
-                <a ref={el => this.saveBtnElm = el}  href="javascript:void(0)"  data-options="iconCls:'icon-save'" style={{height:"25px",marginRight:" 5px"}}>保存</a>
+                
+                <a  title="第一条" href="javascript:void(0)" data-options="plain:true,iconCls:'icon-first-item'" className="easyui-linkbutton"/>
+                <a title="上一条" href="javascript:void(0)" data-options="plain:true,iconCls:'icon-prev-item'" className="easyui-linkbutton"/>
+                <a title="下一条" href="javascript:void(0)" data-options="plain:true,iconCls:'icon-next-item'" className="easyui-linkbutton"/>
+                <a title="最后一条" href="javascript:void(0)" data-options="plain:true,iconCls:'icon-last-item'" className="easyui-linkbutton"/>
+                <a ref={el => this.saveBtnElm = el} title="Ctrl+S" className="easyui-tooltip"  href="javascript:void(0)"  data-options="plain:true,iconCls:'icon-save',position:'top'" style={{height:"25px"}}>保存</a>
                 {/* <a ref={el => this.addEntryBtnElm = el}  href="javascript:void(0)"  data-options="iconCls:'icon-add'" style={{height:"25px",marginRight:" 5px"}}>新增分录</a> */}
-                <a ref={el => this.insertEntryBtnElm = el}  href="javascript:void(0)"  data-options="iconCls:'icon-insert-item'" style={{height:"25px",marginRight:" 5px"}}>插入分录</a>
-                <a ref={el => this.deleteEntryBtnElm = el} href="javascript:void(0)" className="easyui-linkbutton" data-options="iconCls:'icon-remove'" style={{height:"25px",marginRight:"5px"}}>删除分录</a>
-                <a href="javascript:void(0)" className="easyui-menubutton c4" data-options="menu:'#voucherOperation'" style={{height:"25px",marginRight:" 5px"}}>操作</a>
+                <a ref={el => this.insertEntryBtnElm = el}  href="javascript:void(0)"  data-options="plain:true,iconCls:'icon-insert-item'" style={{height:"25px"}}>插入分录</a>
+                <a ref={el => this.deleteEntryBtnElm = el} href="javascript:void(0)" className="easyui-linkbutton" data-options="plain:true,iconCls:'icon-remove'" style={{height:"25px"}}>删除分录</a>
+                <a href="javascript:void(0)" className="easyui-menubutton" data-options="plain:true,menu:'#voucherOperation'" style={{height:"25px"}}>操作</a>
                 <div id="voucherOperation" style={{width:"150px"}}>
                     <div>新建</div>
                     <div>复制</div>
                     <div>刷新</div>
                 </div>
+                
             </div>
 
             <div className="VoucherTitle">

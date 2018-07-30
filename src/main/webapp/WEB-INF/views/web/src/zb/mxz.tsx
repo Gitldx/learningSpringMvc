@@ -59,9 +59,9 @@ class Mxz extends React.Component<{}, { datasource: any[] }>{
     }
 
 
-    private queryAction=({beginM,endM,beginCode,endCode})=>{
+    private queryAction=({beginY,beginM,endY,endM,beginCode,endCode})=>{
         
-        console.log(`beginM:${beginM};endM:${endM},beginCode:${beginCode},endCode:${endCode}`)
+        console.log(`beginY:${beginY},beginM:${beginM};endY:${endY},endM:${endM},beginCode:${beginCode},endCode:${endCode}`)
 
         setTimeout(() => {
             (parent.window as any).subwindowMsg({type:"loaded",value:true});

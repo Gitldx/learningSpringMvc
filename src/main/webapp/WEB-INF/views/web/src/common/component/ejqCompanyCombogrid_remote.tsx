@@ -47,7 +47,7 @@ export default class EjqCompanyCombogrid extends React.Component<IProps>{
 
     public componentDidMount() {
         $(this.comboElm).combogrid({
-            autoSelectFirst : true,
+            
             panelWidth: 300,
             prompt: this.props.prompt,
             idField: 'id',

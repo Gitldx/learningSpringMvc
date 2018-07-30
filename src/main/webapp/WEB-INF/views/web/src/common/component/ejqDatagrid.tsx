@@ -46,7 +46,8 @@ export default class EjqDatagrid extends React.Component<Iprops>{
                 data : this.props.datasource,
                 onDblClickRow :(index,row)=>{this.props.onDblClickRow(index,row);},
                 pagination:true,
-                pageSize:30
+                pageSize:30,
+                pageList: [30,50,100,200]
             })
 			$(this.tableElm).datagrid('clientPaging');
 		});

@@ -33,11 +33,17 @@
 
     <script type="text/javascript">
      $.fn.combogrid.defaults.onLoadSuccess = function(items){
-         if (items.rows){
+         var _context = this;
+         if (items.rows.length > 0){
              var dg = $(this); // .combogrid('grid');
              var opts = dg.datagrid('options');
              if(!!opts.autoSelectFirst){
-                $(this).datagrid('selectAll',0);// items.rows[0][opts.valueField]);
+                //if(items.rows.length > 1){
+                //    $(this).datagrid('selectRow',0);
+                //}
+                if(items.rows.length == 1){
+                    $(opts.comboElm).combogrid("setValue",items.rows[0][opts.idField]);
+                }
              }
          }
      }

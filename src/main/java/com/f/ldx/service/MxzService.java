@@ -11,18 +11,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 @Service
-public class VoucherService {
+public class MxzService {
 
     @Autowired
     private SqlSessionTemplate sessionTemplate;
 
-    @Transactional
+
+    public List<HashMap<String,Object>> Mxz(String Code,int FromY,int FromM,int toY,int ToM){
+        List<HashMap<String,Object>> lst = new ArrayList<>() ;
+        HashMap<String,Object> qcye = new HashMap<>();
+        qcye.put("summary","期初余额");
+        qcye.put("balanceSide","平");
+        qcye.put("balance",0);
+
+        lst.add(qcye);
+        return lst;
+    }
+
     public int addVouhcer(VoucherDTO dto) throws SaveException {
 
         BigDecimal jfAmount = dto.getEntries().stream().filter((item)->item.getBalanceSide() == false).map((item)->new BigDecimal(item.getAmount()))
