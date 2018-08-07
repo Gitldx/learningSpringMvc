@@ -201,6 +201,12 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
 
 
   private query=()=>{
+
+    const toggleFunc = this.toggleQueryFunc();
+    this.setState({queryOpen : !this.state.queryOpen},
+        ()=>toggleFunc()
+    )
+    
     console.log(this.queryComponent.qparams());
     this.props.btnActions.query(this.queryComponent.qparams());
 
@@ -223,7 +229,7 @@ export default class ToolBar extends React.Component<Iprops,IStates>{
     const toggleFunc = this.toggleQueryFunc();
     this.setState({queryOpen : !this.state.queryOpen},
         ()=>toggleFunc()
-      )
+    )
   }
 
  

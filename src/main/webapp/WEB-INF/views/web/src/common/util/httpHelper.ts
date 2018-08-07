@@ -12,6 +12,20 @@ class HttpSend{
         .then(successCb)
         .catch(errCb)
     }
+
+
+    public static get(url : string,bodyData :any,async : boolean = true,successCb? : (json :any)=>void,errCb? : (err:any)=>void) : any{
+        if(async){
+            $.get({url,data : bodyData}).done((response)=>successCb(response)).fail(err=>errCb(err));
+            return;
+        }
+
+        return $.ajax({
+            url,
+            data : bodyData,
+            async : false
+        }).responseJSON
+    }
 }
 
 

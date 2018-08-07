@@ -6,10 +6,12 @@ import com.f.ldx.domain.Voucher;
 import com.f.ldx.domain.VoucherEntry;
 import com.f.ldx.dto.VoucherDTO;
 import com.f.ldx.service.KMService;
+import com.f.ldx.service.MxzService;
 import com.f.ldx.service.VoucherService;
 import javafx.util.Pair;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,6 +34,17 @@ public class MxzController {
 
     @Autowired
     private VoucherService voucherService;
+
+    @Autowired
+    private MxzService service;
+
+    @RequestMapping(method = RequestMethod.GET,path = "/getMxz")
+    @ResponseBody
+    public HashMap<String,Object> Mxz(String code, int beginY, int beginM, int endY, int endM){
+
+        HashMap<String,Object> result = this.service.Mxz(code,beginY,beginM,endY,endM);
+        return result;
+    }
 
     @RequestMapping()
     public ModelAndView list(){

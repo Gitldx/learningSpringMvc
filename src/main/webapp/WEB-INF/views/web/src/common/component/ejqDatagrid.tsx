@@ -30,6 +30,11 @@ export default class EjqDatagrid extends React.Component<Iprops>{
         this.renderTableElm();
     }
 
+    public componentDidUpdate(){
+        $(this.tableElm).datagrid('gotoPage', 1);
+        $(this.tableElm).datagrid("loadData",this.props.datasource)
+    }
+
     get TableElm(){
         return this.tableElm;
     }
@@ -46,8 +51,8 @@ export default class EjqDatagrid extends React.Component<Iprops>{
                 data : this.props.datasource,
                 onDblClickRow :(index,row)=>{this.props.onDblClickRow(index,row);},
                 pagination:true,
-                pageSize:30,
-                pageList: [30,50,100,200]
+                pageSize:25,
+                pageList: [25,50,100,200]
             })
 			$(this.tableElm).datagrid('clientPaging');
 		});

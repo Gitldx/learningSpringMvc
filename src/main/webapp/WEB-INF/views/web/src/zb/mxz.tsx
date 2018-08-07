@@ -5,6 +5,8 @@ import * as ReactDOM from 'react-dom';
 import EqjDatagrid from '../common/component/ejqDatagrid'
 import { VoucherWindow } from '../pz/voucherWindow'
 
+import {HttpSend} from '../common/util/httpHelper'
+
 
 
 class Mxz extends React.Component<{}, { datasource: any[] }>{
@@ -63,9 +65,19 @@ class Mxz extends React.Component<{}, { datasource: any[] }>{
         
         console.log(`beginY:${beginY},beginM:${beginM};endY:${endY},endM:${endM},beginCode:${beginCode},endCode:${endCode}`)
 
-        setTimeout(() => {
-            (parent.window as any).subwindowMsg({type:"loaded",value:true});
-        }, 1000);
+        // const response =  $.ajax({
+        //     url : "/mxz/getMxz",
+        //     data : {code : beginCode,beginY,beginM,endY,endM},
+        //     async : false
+        // }).responseJSON;
+        const response = HttpSend.get("/mxz/getMxz",{code : beginCode,beginY,beginM,endY,endM},false);
+        
+        console.log(response);
+        this.setState({datasource : response.list});
+        
+        (parent.window as any).subwindowMsg({type:"loaded",value:true});
+
+        
         
     }
 
