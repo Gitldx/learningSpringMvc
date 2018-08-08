@@ -32,7 +32,7 @@ class Mxz extends React.Component<{}, { datasource: any[] }>{
         this.state = {
             datasource: [
                 {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"123",summary :"zz",jf : "fdf",df : "fsd",balanceSide : '借',balance : 100},
-                {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"125",summary :"zz",jf : "fdf",df : "fsd",balanceSide : '借',balance : 100},
+                {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"125",summary :"期初余额",jf : "fdf",df : "fsd",balanceSide : '借',balance : 100},
                 {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"129",summary :"zz",jf : "fdf",df : "fsd",balanceSide : '借',balance : 100},
             ],
         };
@@ -42,9 +42,22 @@ class Mxz extends React.Component<{}, { datasource: any[] }>{
     }
 
     public render() {
+        const options = {
+            striped : true,
+            rowStyler : (index,row)=>{
+                switch (row.summary){
+                    case "期初余额":
+                    case "本期合计":
+                    case "本年累计" :
+                        return {class:'datagrid-row-total'};
+                    default :
+                        return undefined;
+                }
+            }
+        }
         return (
             <React.Fragment>
-                <EqjDatagrid columns={this.columns} datasource={this.state.datasource} onDblClickRow={this.datagridDbClick} />
+                <EqjDatagrid columns={this.columns} datasource={this.state.datasource} onDblClickRow={this.datagridDbClick} tableOptions = {options}/>
                 <VoucherWindow ref={el => this.vw = el} />
             </React.Fragment>
         )

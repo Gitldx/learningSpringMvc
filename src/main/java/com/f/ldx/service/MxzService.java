@@ -16,6 +16,17 @@ import org.apache.commons.lang3.tuple.Pair;
 @Service
 public class MxzService {
 
+    final static String DATE = "date";
+    final static String VOUCHERTYPE = "voucherType";
+    final static String VOUCHERNO = "voucherNo";
+    final static String YEAR = "year";
+    final static String PERIOD = "period";
+    final static String SUMMARY = "summary";
+    final static String JF = "jf";
+    final static String DF = "df";
+    final static String BALANCESIDE = "balanceSide";
+    final static String BALANCE = "balance";
+
     @Autowired
     private SqlSessionTemplate sessionTemplate;
 
@@ -78,14 +89,14 @@ public class MxzService {
                 for(HashMap<String, Object> e : es){
                     boolean balanceSide = (boolean)e.get("balanceSide");
                     BigDecimal amount = new BigDecimal(e.get("amount").toString());
-                    amount = balanceSide == kmInfo.getBalanceSide() ? amount : amount.negate();
-                    ye = ye.add(amount);
+                    BigDecimal realAmount = balanceSide == kmInfo.getBalanceSide() ? amount : amount.negate();
+                    ye = ye.add(realAmount);
                     TwoTuple<String,Double> blc = this.balanceConv(kmInfo,ye.doubleValue());
-                    e.put("voucherType","*");
-                    e.put("jf",!balanceSide ? amount.toString() : "");
-                    e.put("df",balanceSide ? amount.toString() : "");
-                    e.put("balanceSide", blc.item1);
-                    e.put("balance", blc.item2);
+                    e.put(VOUCHERTYPE,"*");
+                    e.put(JF,!balanceSide ? amount.toString() : "");
+                    e.put(DF,balanceSide ? amount.toString() : "");
+                    e.put(BALANCESIDE, blc.item1);
+                    e.put(BALANCE, blc.item2);
                 }
 
                 lst.addAll(es);
@@ -96,8 +107,8 @@ public class MxzService {
 
 
 
-            HashMap<String, Object> bqhj = this.generateBqhj(i,jfhj,dfhj,ye);
-            HashMap<String, Object> bnlj = this.generateBnlj(i,bnjfhj,bndfhj,ye);
+            HashMap<String, Object> bqhj = this.generateBqhj(i,jfhj,dfhj,ye,kmInfo);
+            HashMap<String, Object> bnlj = this.generateBnlj(i,bnjfhj,bndfhj,ye,kmInfo);
             lst.add(bqhj);
             lst.add(bnlj);
         }
@@ -119,35 +130,37 @@ public class MxzService {
     }
 
 
-    private HashMap<String, Object> generateBqhj(int ym,BigDecimal jfhj,BigDecimal dfhj,BigDecimal ye){
+    private HashMap<String, Object> generateBqhj(int ym,BigDecimal jfhj,BigDecimal dfhj,BigDecimal ye,KM kmInfo){
         HashMap<String, Object> bqhj = new HashMap<>();
-        bqhj.put("date", "");
-        bqhj.put("voucherType","");
-        bqhj.put("voucherNo","");
-        bqhj.put("year", (int)Math.floor(ym/100));
-        bqhj.put("period",ym - (int)Math.floor(ym/100) * 100);
-        bqhj.put("summary", "本期合计");
-        bqhj.put("jf",jfhj == null ? "" : jfhj);
-        bqhj.put("df",dfhj == null ? "" : dfhj);
-        bqhj.put("balanceSide","借");
-        bqhj.put("balance",ye);
+        bqhj.put(DATE, "");
+        bqhj.put(VOUCHERTYPE,"");
+        bqhj.put(VOUCHERNO,"");
+        bqhj.put(YEAR, (int)Math.floor(ym/100));
+        bqhj.put(PERIOD,ym - (int)Math.floor(ym/100) * 100);
+        bqhj.put(SUMMARY, "本期合计");
+        bqhj.put(JF ,jfhj == null ? "" : jfhj);
+        bqhj.put(DF,dfhj == null ? "" : dfhj);
+        TwoTuple<String,Double> blc = this.balanceConv(kmInfo,ye.doubleValue());
+        bqhj.put(BALANCESIDE,blc.item1);
+        bqhj.put(BALANCE,blc.item2);
 
         return bqhj;
     }
 
 
-    private HashMap<String, Object> generateBnlj(int ym,BigDecimal jfbnlj,BigDecimal dfbnlj,BigDecimal ye){
+    private HashMap<String, Object> generateBnlj(int ym,BigDecimal jfbnlj,BigDecimal dfbnlj,BigDecimal ye,KM kmInfo){
         HashMap<String, Object> bnlj = new HashMap<>();
-        bnlj.put("date", "");
-        bnlj.put("voucherType","");
-        bnlj.put("voucherNo","");
-        bnlj.put("year", (int)Math.floor(ym/100));
-        bnlj.put("period",ym - (int)Math.floor(ym/100) * 100);
-        bnlj.put("summary", "本年累计");
-        bnlj.put("jf",jfbnlj == null ? "" : jfbnlj);
-        bnlj.put("df",dfbnlj == null ? "" : dfbnlj);
-        bnlj.put("balanceSide","借");
-        bnlj.put("balance",ye);
+        bnlj.put(DATE, "");
+        bnlj.put(VOUCHERTYPE,"");
+        bnlj.put(VOUCHERNO,"");
+        bnlj.put(YEAR, (int)Math.floor(ym/100));
+        bnlj.put(PERIOD,ym - (int)Math.floor(ym/100) * 100);
+        bnlj.put(SUMMARY, "本年累计");
+        bnlj.put(JF,jfbnlj == null ? "" : jfbnlj);
+        bnlj.put(DF,dfbnlj == null ? "" : dfbnlj);
+        TwoTuple<String,Double> blc = this.balanceConv(kmInfo,ye.doubleValue());
+        bnlj.put(BALANCESIDE,blc.item1);
+        bnlj.put(BALANCE,blc.item2);
 
         return bnlj;
     }
@@ -164,21 +177,21 @@ public class MxzService {
         qcye.put("qcjflj",new BigDecimal(qclj.get("jflj").toString()));
         qcye.put("qcdflj",new BigDecimal(qclj.get("dflj").toString()));
 
-        qcye.put("summary", "期初余额");
+        qcye.put(SUMMARY, "期初余额");
 
         TwoTuple<String, Double> blc = this.balanceConv(kmInfo, qcyeAmount);
 
-        qcye.put("balanceSide", blc.item1);
-        qcye.put("balance", blc.item2);
+        qcye.put(BALANCESIDE, blc.item1);
+        qcye.put(BALANCE, blc.item2);
 
 
-        qcye.put("date", "");
-        qcye.put("voucherType","");
-        qcye.put("voucherNo","");
-        qcye.put("year", fromY);
-        qcye.put("period",fromM);
-        qcye.put("jf","" );
-        qcye.put("df", "" );
+        qcye.put(DATE, "");
+        qcye.put(VOUCHERTYPE,"");
+        qcye.put(VOUCHERNO,"");
+        qcye.put(YEAR, fromY);
+        qcye.put(PERIOD,fromM);
+        qcye.put(JF,"" );
+        qcye.put(DF, "" );
 
 
         return qcye;

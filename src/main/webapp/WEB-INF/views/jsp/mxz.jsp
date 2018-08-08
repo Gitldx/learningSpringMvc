@@ -19,7 +19,18 @@
     <script type="text/javascript" src="/js/lib/EasyUi/datagrid-cellediting.js"></script>
     <script type="text/javascript" src="/js/lib/EasyUi/easyui-lang-zh_CN.js"></script>
 
-
+    <style type="text/css">
+        .datagrid-row-alt{
+        		background: #2738b014;
+        }
+        .datagrid-row-selected {
+          background: #0092DC !important;
+          color: #fff;
+        }
+        .datagrid-row-total {
+          background:#ff572214;
+        }
+    </style>
 </head>
 <body>
 

@@ -6,6 +6,7 @@ import * as React from "react";
 interface Iprops{
     columns : any,
     datasource : any,
+    tableOptions? : {},
     onDblClickRow(index : number,row : any)
     
 }
@@ -52,7 +53,8 @@ export default class EjqDatagrid extends React.Component<Iprops>{
                 onDblClickRow :(index,row)=>{this.props.onDblClickRow(index,row);},
                 pagination:true,
                 pageSize:25,
-                pageList: [25,50,100,200]
+                pageList: [25,50,100,200],
+                ...this.props.tableOptions
             })
 			$(this.tableElm).datagrid('clientPaging');
 		});

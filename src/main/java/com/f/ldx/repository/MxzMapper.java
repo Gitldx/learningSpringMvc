@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public interface MxzMapper {
 
-    @Select("select V.voucherDate as date,V.year,V.period,V.voucherTypeId,V.voucherNum as voucherNo,VE.summary,VE.amount,VE.balanceSide,Acc.accountCode,Acc.accountName" +
+    @Select("select V.id, V.voucherDate as date,V.year,V.period,V.voucherTypeId,V.voucherNum as voucherNo,VE.summary,VE.amount,VE.balanceSide,Acc.accountCode,Acc.accountName" +
             " FROM dbo.Voucher V INNER JOIN VoucherEntries VE ON V.id = VE.VoucherId INNER JOIN Account Acc ON VE.AccountId = Acc.id\n" +
             "WHERE V.BookId = 2 AND V.Year *100 + V.Period between #{fromYM} and #{toYM} AND Acc.AccountCode LIKE CONCAT(#{code},'%')")
     ArrayList<HashMap<String,Object>> getEntries(String code,int fromYM,int toYM);
