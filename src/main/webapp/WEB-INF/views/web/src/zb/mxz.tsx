@@ -5,6 +5,8 @@ import * as ReactDOM from 'react-dom';
 import EqjDatagrid from '../common/component/ejqDatagrid'
 import { VoucherWindow } from '../pz/voucherWindow'
 
+import bindWindowAction from '../common/util/bindWindowAction'
+
 import {HttpSend} from '../common/util/httpHelper'
 
 
@@ -36,9 +38,9 @@ class Mxz extends React.Component<{}, { datasource: any[] }>{
                 {date : '2018/04/23',year:2018,period : 8,voucherType:"*",voucherNo:"129",summary :"zz",jf : "fdf",df : "fsd",balanceSide : '借',balance : 100},
             ],
         };
-
         
-        (window as any).queryAction = this.queryAction;
+        bindWindowAction({queryAction :this.queryAction});
+        // (window as any).queryAction = this.queryAction;
     }
 
     public render() {
@@ -65,6 +67,7 @@ class Mxz extends React.Component<{}, { datasource: any[] }>{
 
 
     private datagridDbClick = (index: number, row: any) => {
+        if(!row.id){return;}
         this.vw.closeWindow();
         const id: number = row.id;
         setTimeout(() => {

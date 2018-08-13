@@ -4,7 +4,7 @@ import * as ReactDOM from 'react-dom';
 import EqjDatagrid from '../common/component/ejqDatagrid'
 import {VoucherWindow} from './voucherWindow'
 
-
+import bindWindowAction from '../common/util/bindWindowAction'
 
 export default class List extends React.Component{
 
@@ -54,8 +54,10 @@ export default class List extends React.Component{
 
         this.setEuiControl();
 
-        (window as any).addAction = this.add;
-        (window as any).queryAction = this.queryAction;
+        bindWindowAction({queryAction : this.queryAction,addAction : this.add});
+
+        // (window as any).addAction = this.add;
+        // (window as any).queryAction = this.queryAction;
 
     }
 
