@@ -158,6 +158,11 @@ export default class Pzgrid extends React.Component<{},{}>{
             , onHidePanel(){
                 window.IsDropDownOpen = false;
                 $(this).combogrid("options").selectOnNavigation = false;
+
+                const currentcell = $("#vTable").datagrid("cell");
+                if(!currentcell){return;}
+                const selected:number = currentcell.index;
+                console.log(`currentRow:${selected}`);
                 
             },
             filter: (q:string, row:IAccount)=>{
@@ -247,6 +252,7 @@ export default class Pzgrid extends React.Component<{},{}>{
         )).sort((a,b)=> a.AccountCode < b.AccountCode ? -1 : 1)
 
         window.IsDropDownOpen = false;
+        window.hidePanelByEnter = true;
     }
 
     public render(){
@@ -534,6 +540,7 @@ export default class Pzgrid extends React.Component<{},{}>{
 
 
     private oncomboShowPanel=()=>{
+        window.hidePanelByEnter = false;
         window.IsDropDownOpen = true;
         const thiscontext = this;
         const [index,field] = [this.selectedIndex,KmColumnField];
