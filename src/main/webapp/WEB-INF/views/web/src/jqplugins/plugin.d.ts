@@ -26,4 +26,7 @@ interface JQuery {
 
     popmenu():any;
     panel(obj:{}):any;
+
+    jexcel(obj:{}) : any;
+    jexcel(method : string,...param) : any;
 }
