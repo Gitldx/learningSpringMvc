@@ -280,11 +280,11 @@ export class VoucherHeader extends React.Component<IProps,{}>{
                     this.ejqAlert.info("保存成功")
                 }
                 else{
-                    this.ejqAlert.warn(responseJsonData.msg)
+                    this.ejqAlert.error(responseJsonData.msg)
                 }
 
         },(error)=>{
-            this.ejqAlert.warn(error)
+            this.ejqAlert.error(error)
         }
         )
 

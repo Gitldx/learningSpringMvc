@@ -6,7 +6,9 @@ import * as React from "react";
 import AccountEdit3 from '../account/accountEdit3'
 import {AccountList as AccList} from '../account/accountList'
 
+import EjqAlert from '../common/component/ejqAlert'
 import EjqWindow from '../common/component/ejqWindow'
+
 import VoucherEntryModel from "./VoucherEntryModel"
 
 import {AccountModel} from "../account/AccountModel"
@@ -49,7 +51,7 @@ export default class Pzgrid extends React.Component<{},{}>{
 
     private ejqWindow : EjqWindow;
     private accListWindow : EjqWindow;
-
+    private ejqAlert : EjqAlert;
 
     
     private dataSource : {rows:VoucherEntryModel[],footer:IVFooter[]} 
@@ -159,14 +161,30 @@ export default class Pzgrid extends React.Component<{},{}>{
                 window.IsDropDownOpen = false;
                 $(this).combogrid("options").selectOnNavigation = false;
 
-                const currentcell = $("#vTable").datagrid("cell");
+                const dg = $("#vTable");
+                const currentcell = dg.datagrid("cell");
                 if(!currentcell){return;}
                 const selected:number = currentcell.index;
-                console.log(`currentRow:${selected}`);
+                // console.log(`currentRow:${selected}`);
+                const currentEntry : VoucherEntryModel = (dg.datagrid("getData").rows as VoucherEntryModel[])[selected];
+                if(!currentEntry.IsDetailAccount){
+                    (window.pzConext as Pzgrid).warn("请选择明细科目！",
+                        ()=>{
+                            setTimeout(() => {
+                                console.log("editCell");
+                                dg.datagrid("editCell", {
+                                    index: selected,
+                                    field :KmColumnField
+                                })
+                            }, 0);
+                        }
+                    );
+                    
+                }
                 
             },
             filter: (q:string, row:IAccount)=>{
-                return row.AccountCode.startsWith(q);;
+                return row.AccountCode.startsWith(q);
             }
            
         }
@@ -245,6 +263,7 @@ export default class Pzgrid extends React.Component<{},{}>{
 
     constructor(prop:{}){
         super(prop);
+        window.pzConext = this;
         this.state = {};
 
         this.accountsDataSource = accList.map((item)=>(
@@ -300,6 +319,7 @@ export default class Pzgrid extends React.Component<{},{}>{
                     <AccountEdit3  account={null}/>
                 </EjqWindow>
 
+                <EjqAlert ref = {el => this.ejqAlert = el}/>
             </div>
             );
     }
@@ -423,23 +443,23 @@ export default class Pzgrid extends React.Component<{},{}>{
 
 
         $(this.tableElm).bind("onCellNavOut",(event:any,index:number,field:string)=>{
-            if(field === KmColumnField){
-                const data = $(this.tableElm).datagrid("getData");
-                const result = (data.rows as VoucherEntryModel[]).find((value : VoucherEntryModel,i:number)=>{
-                    return value.Account && !value.IsDetailAccount;
-                });
+            // if(field === KmColumnField){
+            //     const data = $(this.tableElm).datagrid("getData");
+            //     const result = (data.rows as VoucherEntryModel[]).find((value : VoucherEntryModel,i:number)=>{
+            //         return value.Account && !value.IsDetailAccount;
+            //     });
 
-                if(result){
+            //     if(result){
                     
-                    setTimeout(() => {
-                        $(this.tableElm).datagrid("editCell", {
-                            index,
-                            field
-                        })
-                    }, 200);
+            //         setTimeout(() => {
+            //             $(this.tableElm).datagrid("editCell", {
+            //                 index,
+            //                 field
+            //             })
+            //         }, 200);
                     
-                }
-            }
+            //     }
+            // }
         });
     }
 
@@ -453,6 +473,15 @@ export default class Pzgrid extends React.Component<{},{}>{
         }
 
     }
+
+
+    public warn(msg:string, callBack? : ()=>void){
+        $("#escapeFocusDiv").click();
+
+        this.ejqAlert.warn(msg,callBack);
+
+    }
+
 
     private closeedHandler=()=>{
         this.hasPopupAccountList = false;

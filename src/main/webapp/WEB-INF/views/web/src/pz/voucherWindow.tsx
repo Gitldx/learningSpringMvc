@@ -39,8 +39,9 @@ export class VoucherWindow extends React.Component<{},IState>{
             : "";
         return(
             <div id="vwin" style={{overflow:"hidden",position:"relative"}}>
+                <div id="escapeFocusDiv"/>
                 {dg}
-            <div id="auditFlag"/>
+                <div id="auditFlag"/>
             </div>
         );
     }

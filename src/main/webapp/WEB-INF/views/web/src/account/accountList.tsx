@@ -429,7 +429,7 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
 
         if(!this.getLevelOfCode(m.AccountCode)){
             
-            this.ejqAlert.warn("科目长度不合法！");
+            this.ejqAlert.error("科目长度不合法！");
             return;
         }
 
@@ -458,10 +458,10 @@ export class AccountList extends React.Component<IProps,{currentAccount : Accoun
                 }
                 else{
                     
-                    this.ejqAlert.warn(responseJsonData.msg);
+                    this.ejqAlert.error(responseJsonData.msg);
                 }
             },(error)=>{
-                this.ejqAlert.warn(error)
+                this.ejqAlert.error(error)
             }
         )
 
